@@ -1,0 +1,16 @@
+export default {
+    PASSWORD_STRENGTH: {
+        TOO_WEAK: 'Too Weak',
+        WEAK: 'Weak',
+    },
+    CLIENT_SECRET: 'b8beaf678cdb',
+    CREATED: 'CREATED',
+    WAITING_FOR_SCAN: 'WAITING_FOR_SCAN',
+    WAITING_FOR_APPROVAL: 'WAITING_FOR_APPROVAL',
+    POSTED: 'POSTED',
+    COMPLETED: 'COMPLETED',
+    SELL: 'sell',
+    EXCHANGE: 'exchange',
+    IN_TRANSACTION: 'IN_TRANSACTION',
+    SYSTEM_CANCEL_ACCEPT: 'SYSTEM_CANCEL_ACCEPT',
+}

@@ -1,0 +1,5 @@
+export default {
+    SERVER_ERROR: 'SERVER_ERROR',
+    CLIENT_ERROR: 'CLIENT_ERROR',
+    AUTH_ERROR: 'AUTH_ERROR',
+}

@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proposal-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: proposal
+  template:
+    metadata:
+      labels:
+        app: proposal
+    spec:
+      containers:
+        - name: proposal
+          image: us.gcr.io/test-db-281ef/proposal
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: redis-host
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: redis-port
+                  key: REDIS_PORT
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-pasword
+                  key: REDIS_PASSWORD
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: client-secret
+                  key: CLIENT_SECRET
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: db-host-postgres
+                  key: DB_HOST_POSTGRES
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-postgres
+                  key: DB_USER_POSTGRES
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: db-pass-postgres
+                  key: DB_PASS_POSTGRES
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-database-postgres
+                  key: DB_DATABASE_POSTGRES
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: db-port-postgres
+                  key: DB_PORT_POSTGRES
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proposal-srv
+spec:
+  selector:
+    app: proposal
+  ports:
+    - name: proposal
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

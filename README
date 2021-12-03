@@ -1,0 +1,99 @@
+kubectl create secret generic redis-port --from-literal=REDIS_PORT="6379"
+kubectl create secret generic redis-pasword --from-literal=REDIS_PASSWORD="vnng@2018"
+kubectl create secret generic cloudinary-cloud-name --from-literal=CLOUDINARY_CLOUD_NAME="deeucfdkq"
+kubectl create secret generic cloudinary-api-key --from-literal=CLOUDINARY_API_KEY="232656293185281"
+kubectl create secret generic cloudinary-api-secret --from-literal=CLOUDINARY_API_SECRET="0oD503FkjXiEPx2YfkUufeFfCRo"
+kubectl create secret generic stripe-api-key --from-literal=STRIPE_API_KEY="sk_test_51HyYmTI5rQzgAhCOfPbGY94MARCfuhPhSXS9gckLp4iBA8bo4pd6vlndxHPLhjdZ4oBfNGswqLK7RDtvZ8fiDfAN00qHxZEB0L"
+kubectl create secret generic shippo-token --from-literal=SHIPPO_TOKEN="shippo_test_fbd312cb5282127d5571a64e650cf23a9fc26249"
+
+kubectl create secret generic redis-host --from-literal=REDIS_HOST="192.168.175.113"
+
+kubectl create secret generic client-secret --from-literal=CLIENT_SECRET="deeucfdkq"
+kubectl create secret generic db-user-postgres --from-literal=DB_USER_POSTGRES="tomrot"
+kubectl create secret generic db-pass-postgres --from-literal=DB_PASS_POSTGRES="vnng2018"
+kubectl create secret generic db-database-postgres --from-literal=DB_DATABASE_POSTGRES="tomrot"
+kubectl create secret generic db-port-postgres --from-literal=DB_PORT_POSTGRES="5433"
+
+kubectl delete secret generic db-host-postgres
+kubectl delete secret generic redis-host
+
+
+VPN Pass
+6MvDNoqn
+    Activation Code
+        EPGJVFNMIOHF4WJ67A6EKAU
+
+Backup
+docker exec -t postgres_test pg_dumpall -c -U tomrot > C:/Users/TP-LAPTOP/Downloads/backup_canada/backup_newest.sql
+
+Restore
+cat C:/Users/TP-LAPTOP/Downloads/backup_canada/backup_newest.sql | docker exec -i postgres_test psql -U tomrot
+
+{
+    "wifi": "y",
+    "brand": "Apple",
+    "flash": "y",
+    "model": "iPhone XS",
+    "camera": "y",
+    "faceID": "y",
+    "finger": "nothave",
+    "volume": "y",
+    "storage": "64GB",
+    "released": "14.6",
+    "bluetooth": "y",
+    "processor": "A12 Bionic",
+    "touch_url": "https://res.cloudinary.com/deeucfdkq/image/upload/v1625794556/hp6nyx962zuqkwaahew3.png",
+    "microphone": "y",
+    "storageUsed": "28GB",
+    "touchscreen": "n",
+    "pointScanner": 20
+}
+Email:
+
+huonglanphanthi395@gmail.com
+mainguyenhoang744@gmail.com
+
+BUILD image
+
+
+PORT-FORWARD
+kubectl port-forward nats-depl-5d9bc97b4f-jdf4z 8222:8222 - Heath check
+kubectl port-forward nats-depl-5d9bc97b4f-jdf4z 4222:4222
+
+KUBECTL KEYS
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY="asdf"
+kubectl create secret generic db-user-postgres --from-literal=DB_USER_POSTGRES="tomrot"
+kubectl create secret generic db-pass-postgres --from-literal=DB_PASS_POSTGRES="vnng2018"
+kubectl create secret generic db-database-postgres --from-literal=DB_DATABASE_POSTGRES="tomrot"
+kubectl create secret generic db-port-postgres --from-literal=DB_PORT_POSTGRES="5433"
+kubectl create secret generic shippo-token --from-literal=SHIPPO_TOKEN="shippo_test_ba8a50540cb529119d80513713c2ad91690ba88a"
+kubectl create secret generic stripe-api-key --from-literal=STRIPE_API_KEY="sk_test_51HyYmTI5rQzgAhCOfPbGY94MARCfuhPhSXS9gckLp4iBA8bo4pd6vlndxHPLhjdZ4oBfNGswqLK7RDtvZ8fiDfAN00qHxZEB0L"
+
+kubectl create secret generic db-host-postgres --from-literal=DB_HOST_POSTGRES="192.168.1.5"
+kubectl delete secret generic db-host-postgres
+
+Ingress
+Cài ingress docker desktop
+kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+
+NPM:
+huonglanphanthi395@gmail.com
+Zaq1@wsxcde34rfv
+npm login
+npm publish --access public
+
+Stripe
+Email: buivuongdhmo@gmail.com
+Pass: 6^c-ey->rUWJ9k$p
+
+UPLOAD FILES
+https://console.firebase.google.com/u/0/project/upload-files-f6826/storage/upload-files-f6826.appspot.com/files/~2F
+buivuongdhmo@gmail.com
+
+ADDRESSES
+"street1":"215 Clayton St.",
+"city":"San Francisco",
+"state":"CA",
+"zip":"94117",
+"country":"US",
+"email":"shippotle@goshippo.com",

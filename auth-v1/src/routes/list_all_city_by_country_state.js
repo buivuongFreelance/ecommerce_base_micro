@@ -1,0 +1,37 @@
+import express from 'express';
+import { body } from 'express-validator';
+import { QueryFailedError, BadRequestError } from '@tomrot/common';
+import { validateRequest } from '@tomrot/common';
+import db from '../adapters/db';
+
+const router = express.Router();
+
+router.post('/api/v1/auth/city/listAllByCountryState', [
+    body('countryCode')
+        .trim()
+        .notEmpty()
+        .withMessage('You must supply a country code'),
+    body('stateCode')
+        .trim()
+        .notEmpty()
+        .withMessage('You must supply a state code'),
+], validateRequest, async (req, res) => {
+    const { countryCode, stateCode } = req.body;
+
+    const country = await db('countries').first('id').where('country_code_alpha2', countryCode);
+    if (!country) {
+        throw new BadRequestError('Country not found');
+    }
+
+    try {
+        const cities = await db('cities').select('*').where({
+            country_id: country.id,
+            state_code: stateCode
+        }).orderBy('name', 'asc');
+        res.send(cities);
+    } catch (err) {
+        throw new QueryFailedError();
+    }
+});
+
+export { router as listAllCityByCountryStateRouter };

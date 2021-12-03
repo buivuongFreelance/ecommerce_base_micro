@@ -1,0 +1,35 @@
+{
+  "name": "transaction-v1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/node": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "@tomrot/common": "^1.0.38",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-validator": "^6.12.2",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.11",
+    "node-imei": "^1.0.8",
+    "order-id": "^2.1.1",
+    "pg": "^8.7.1",
+    "shippo": "^1.6.0",
+    "stripe": "^8.186.0",
+    "uuid": "^8.3.2"
+  }
+}

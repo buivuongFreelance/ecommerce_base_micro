@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-v1-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transaction-v1
+  template:
+    metadata:
+      labels:
+        app: transaction-v1
+    spec:
+      containers:
+        - name: transaction-v1
+          image: ca.tomrot.io/swapez/transaction-v1
+          env:
+            # - name: MONGO_URI
+            #   value: "mongodb://mongo-srv:27017/device"
+            # - name: NATS_URL
+            #   value: "http://nats-srv:4222"
+            # - name: NATS_CLUSTER_ID
+            #   value: tomrot
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: db-host-postgres
+                  key: DB_HOST_POSTGRES
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-postgres
+                  key: DB_USER_POSTGRES
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: db-pass-postgres
+                  key: DB_PASS_POSTGRES
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-database-postgres
+                  key: DB_DATABASE_POSTGRES
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: db-port-postgres
+                  key: DB_PORT_POSTGRES
+            - name: SHIPPO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: shippo-token
+                  key: SHIPPO_TOKEN
+            - name: STRIPE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-api-key
+                  key: STRIPE_API_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-v1-srv
+spec:
+  selector:
+    app: transaction-v1
+  ports:
+    - name: transaction-v1
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

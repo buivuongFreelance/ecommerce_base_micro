@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transaction
+  template:
+    metadata:
+      labels:
+        app: transaction
+    spec:
+      containers:
+        - name: transaction
+          image: us.gcr.io/test-db-281ef/transaction
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: redis-host
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: redis-port
+                  key: REDIS_PORT
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-pasword
+                  key: REDIS_PASSWORD
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: client-secret
+                  key: CLIENT_SECRET
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: db-host-postgres
+                  key: DB_HOST_POSTGRES
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-postgres
+                  key: DB_USER_POSTGRES
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: db-pass-postgres
+                  key: DB_PASS_POSTGRES
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-database-postgres
+                  key: DB_DATABASE_POSTGRES
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: db-port-postgres
+                  key: DB_PORT_POSTGRES
+            - name: SHIPPO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: shippo-token
+                  key: SHIPPO_TOKEN
+            - name: STRIPE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-api-key
+                  key: STRIPE_API_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-srv
+spec:
+  selector:
+    app: transaction
+  ports:
+    - name: transaction
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

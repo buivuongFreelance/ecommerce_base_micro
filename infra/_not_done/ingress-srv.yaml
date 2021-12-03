@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api/v1/auth/?(.*)
+            backend:
+              serviceName: auth-srv
+              servicePort: 3000
+          - path: /api/v1/model/?(.*)
+            backend:
+              serviceName: model-srv
+              servicePort: 3000
+          - path: /api/v1/device/?(.*)
+            backend:
+              serviceName: device-srv
+              servicePort: 3000
+          - path: /api/v1/cart/?(.*)
+            backend:
+              serviceName: cart-srv
+              servicePort: 3000
+          - path: /api/v1/email/?(.*)
+            backend:
+              serviceName: email-srv
+              servicePort: 3000
+          - path: /api/v1/upload/?(.*)
+            backend:
+              serviceName: upload-srv
+              servicePort: 3000
+          - path: /api/v1/proposal/?(.*)
+            backend:
+              serviceName: proposal-srv
+              servicePort: 3000
+          - path: /api/v1/transaction/?(.*)
+            backend:
+              serviceName: transaction-srv
+              servicePort: 3000
+          - path: /api/v1/admin/?(.*)
+            backend:
+              serviceName: admin-srv
+              servicePort: 3000

@@ -1,0 +1,9 @@
+export const CREATED = 'CREATED';
+export const WAITING_FOR_SCAN = 'WAITING_FOR_SCAN';
+export const WAITING_FOR_APPROVAL = 'WAITING_FOR_APPROVAL';
+export const POSTED = 'POSTED';
+export const COMPLETED = 'COMPLETED';
+export const SELL = 'sell';
+export const EXCHANGE = 'exchange';
+export const IN_TRANSACTION = 'IN_TRANSACTION';
+export const SYSTEM_CANCEL_ACCEPT = 'SYSTEM_CANCEL_ACCEPT';
