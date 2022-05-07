@@ -5,7 +5,6 @@ import { POSTED, WAITING_FOR_SCAN, CREATED } from '../config';
 import { checkDeviceScanOrNotScan } from '../functions';
 
 export const removeOrder = async (req, res) => {
-  if (!req.login) return helper.showClientUnauthorized(res, true);
 
   const { id } = req.body;
   if (!id) return helper.showClientEmpty(res);
@@ -35,7 +34,7 @@ export const removeOrder = async (req, res) => {
     } = checkDeviceScanOrNotScan(transactionsExchange.concat(transactions));
 
     await db.transaction(async (trx) => {
-    // eslint-disable-next-line func-names
+      // eslint-disable-next-line func-names
       await trx.from('transactions_exchange').whereIn('transaction_id', function () {
         return this.from('transactions').distinct('id').where('order_id', id);
       }).delete();
@@ -79,7 +78,6 @@ export const removeOrder = async (req, res) => {
 };
 
 export const listOrder = async (req, res) => {
-  if (!req.login) return helper.showClientUnauthorized(res, true);
 
   const { offset, limit } = req.body;
   if (!limit) return helper.showClientEmpty(res);
