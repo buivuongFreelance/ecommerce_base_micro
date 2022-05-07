@@ -112,3 +112,5 @@ rsync --progress --partial -avz E:/projects/_backup/ root@128.199.186.198:/home/
 cat /home/backup/backup_swapez.sql | docker exec -i postgres_test psql -U tomrot
 
 scp E:/projects/_backup/backup_tomrot.sql root@128.199.186.198:/home/backup
+
+pm2 start "npm run dev" --name micro-auth
