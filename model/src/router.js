@@ -68,8 +68,8 @@ router.get('/city/byName/:name', getCityByName);
 router.get('/countries/listAll', controllers.countries.listAll);
 router.get('/country/:id', controllers.countries.detail);
 
-router.post('/orders', validateAdmin, listOrder);
-router.post('/order/delete', validateAdmin, removeOrder);
+router.post('/orders', listOrder);
+router.post('/order/delete', removeOrder);
 
 router.post('/settings', validateAdmin, controllers.settings.listPost);
 router.post('/setting', validateAdmin, controllers.settings.create);
