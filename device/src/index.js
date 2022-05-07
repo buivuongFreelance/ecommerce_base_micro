@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/v1/device', router);
 
-app.listen(3000, () => {
+app.listen(20001, () => {
   // eslint-disable-next-line no-console
-  console.log('app is listening to port 3000');
+  console.log('app is listening to port 20001');
 });
