@@ -1,5 +1,5 @@
 {
-  "name": "auth_web",
+  "name": "transaction-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -26,7 +26,7 @@
     "pg": "^8.6.0",
     "bull": "^3.20.1",
     "is_js": "^0.9.0",
-    "micro-helper": "git+https://buivuong1990:vnng@2018@bitbucket.org/dingtoi/functions.git",
+    "micro-helper": "1.0.3",
     "order-id": "^2.1.0",
     "paypal-rest-sdk": "^1.8.1",
     "shippo": "^1.5.0",

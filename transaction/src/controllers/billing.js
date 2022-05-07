@@ -13,9 +13,6 @@ const create = async (req, res) => {
     if (!firstName) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!lastName) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!address) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!city) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!postalCode) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!country) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!phoneNumber) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     const id = uuidv1();
     const date = new Date();
@@ -25,12 +22,8 @@ const create = async (req, res) => {
       await db('billings').update({
         first_name: firstName,
         last_name: lastName,
-        address,
-        city_id: city,
-        zip: postalCode,
-        country_id: country,
+        full_address: address,
         phone: phoneNumber,
-        state_code: province,
         created_at: date,
         updated_at: date,
       }).where('user_id', userId);
@@ -40,12 +33,8 @@ const create = async (req, res) => {
         user_id: userId,
         first_name: firstName,
         last_name: lastName,
-        address,
-        city_id: city,
-        zip: postalCode,
-        country_id: country,
+        full_address: address,
         phone: phoneNumber,
-        state_code: province,
         created_at: date,
         updated_at: date,
       });
@@ -65,9 +54,6 @@ const update = async (req, res) => {
     if (!firstName) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!lastName) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!address) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!city) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!postalCode) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!country) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!phoneNumber) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     const checkid = await db('billings').first('id').where({ id });
     if (!checkid) return helper.showClientBadRequest(res, 'billing not exist');
@@ -76,12 +62,8 @@ const update = async (req, res) => {
     await db('billings').update({
       first_name: firstName,
       last_name: lastName,
-      address,
-      city_id: city,
-      zip: postalCode,
-      country_id: country,
+      full_address: address,
       phone: phoneNumber,
-      state_code: province,
       updated_at: date,
     }).where({ id });
     return helper.showSuccessOk(res, helper.SUCCESS);

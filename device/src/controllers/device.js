@@ -161,6 +161,8 @@ const add = async (req, res) => {
       .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
       .first('devices.id')
       .where('imeis.imei', imei);
+
+    console.log(checkDeviceImei);
     if (checkDeviceImei) return helper.showClientBadRequest(res, helper.ERR_EXIST);
 
     const checkImei = await db('imeis')

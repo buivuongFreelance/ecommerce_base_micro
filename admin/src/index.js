@@ -1,17 +1,31 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-import router from './router';
+import 'express-async-errors';
+require('dotenv').config();
+import { app } from './app';
 
-dotenv.config();
+const start = async () => {
+    if (!process.env.DB_HOST) {
+        throw new Error('DB_HOST must be defined');
+    }
 
-const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
+    if (!process.env.DB_PORT) {
+        throw new Error('DB_PORT must be defined');
+    }
 
-app.use(bodyParser.json());
-app.use('/api/v1/admin', router);
+    if (!process.env.DB_USER) {
+        throw new Error('DB_USER must be defined');
+    }
 
-app.listen(3000, () => {
-  // eslint-disable-next-line no-console
-  console.log('app is listening to port 3000');
+    if (!process.env.DB_PASS) {
+        throw new Error('DB_PASS must be defined');
+    }
+
+    if (!process.env.DB_DATABASE) {
+        throw new Error('DB_DATABASE must be defined');
+    }
+};
+
+app.listen(30001, () => {
+    console.log('Example app listening on port 30001!');
 });
+
+start();

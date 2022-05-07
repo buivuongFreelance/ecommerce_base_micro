@@ -12,6 +12,7 @@ const registerTracingUser = async (req, res) => {
     const id = await db('tracing_users').insert({ ip, created_at: date, updated_at: date }, 'id');
     return helper.showSuccessOk(res, id[0]);
   } catch (error) {
+    console.log(error);
     return helper.showServerError(res, error);
   }
 };

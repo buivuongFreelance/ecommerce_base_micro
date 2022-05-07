@@ -5,7 +5,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/configuration-snippet: |
-      more_set_headers "Access-Control-Allow-Origin: http://localhost:3000";
+      more_set_headers "Access-Control-Allow-Origin: *";
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
@@ -19,34 +19,48 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: auth-v1-srv
-                port:
-                  number: 3000
-          - path: /api/v1/device/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: device-v1-srv
-                port:
-                  number: 3000
-          - path: /api/v1/order/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: order-v1-srv
+                name: auth-srv
                 port:
                   number: 3000
           - path: /api/v1/cart/?(.*)
             pathType: Prefix
             backend:
               service:
-                name: cart-v1-srv
+                name: cart-srv
+                port:
+                  number: 3000
+          - path: /api/v1/device/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: device-srv
+                port:
+                  number: 3000
+          - path: /api/v1/model/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: model-srv
                 port:
                   number: 3000
           - path: /api/v1/transaction/?(.*)
             pathType: Prefix
             backend:
               service:
-                name: transaction-v1-srv
+                name: transaction-srv
+                port:
+                  number: 3000
+          - path: /api/v1/proposal/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: proposal-srv
+                port:
+                  number: 3000
+          - path: /api/v1/upload/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: upload-srv
                 port:
                   number: 3000

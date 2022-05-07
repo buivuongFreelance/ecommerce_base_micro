@@ -26,7 +26,7 @@
     "pg": "^8.6.0",
     "axios": "^0.19.2",
     "moment-timezone": "^0.5.31",
-    "micro-helper": "git+https://buivuong1990:vnng@2018@bitbucket.org/dingtoi/functions.git",
+    "micro-helper": "1.0.3",
     "is_js": "^0.9.0",
     "uuid": "^8.3.0"
   },

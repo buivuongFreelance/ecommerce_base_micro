@@ -8,18 +8,11 @@ const getShippingAndBillingLast = async (req, res) => {
   const { userId } = req;
   try {
     const shipping = await db('shippings')
-      .innerJoin('cities', 'cities.id', 'shippings.city_id')
-      .innerJoin('countries', 'countries.id', 'shippings.country_id')
-      .first('shippings.id', 'first_name', 'last_name', 'address',
-        'zip as postal_code', 'phone as phone_number', 'shippings.country_id', 'countries.country_code_alpha2 as country_code',
-        'city_id as city', 'cities.name as city_name', 'shippings.state_code as province')
+      .first('shippings.*')
       .where('user_id', userId)
       .orderBy('shippings.created_at', 'DESC');
     const billing = await db('billings')
-      .innerJoin('cities', 'cities.id', 'billings.city_id')
-      .first('billings.id', 'first_name', 'last_name', 'billings.address',
-        'billings.zip as postal_code', 'billings.phone as phone_number', 'billings.country_id',
-        'city_id as city', 'cities.name as city_name', 'billings.state_code as province')
+      .first('billings.*')
       .orderBy('billings.created_at', 'DESC')
       .where('user_id', userId);
 
@@ -39,24 +32,26 @@ const create = async (req, res) => {
     if (!firstName) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!lastName) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!address) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!city) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!postalCode) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!country) return helper.showClientBadRequest(res, helper.ERR_COMMON);
+    // if (!city) return helper.showClientBadRequest(res, helper.ERR_COMMON);
+    // if (!postalCode) return helper.showClientBadRequest(res, helper.ERR_COMMON);
+    // if (!country) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!phoneNumber) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     const id = uuidv1();
     const date = new Date();
     const checkShipping = await db('shippings').first('id').where('user_id', userId);
 
+    console.log(phoneNumber);
+
     if (checkShipping) {
       await db('shippings').update({
         first_name: firstName,
         last_name: lastName,
-        address,
-        city_id: city,
-        zip: postalCode,
-        country_id: country,
+        full_address: address,
+        // city_id: city,
+        // zip: postalCode,
+        // country_id: country,
         phone: phoneNumber,
-        state_code: province,
+        // state_code: province,
         created_at: date,
         updated_at: date,
       }).where('user_id', userId);
@@ -66,12 +61,12 @@ const create = async (req, res) => {
         user_id: userId,
         first_name: firstName,
         last_name: lastName,
-        address,
-        city_id: city,
-        zip: postalCode,
-        country_id: country,
+        full_address: address,
+        // city_id: city,
+        // zip: postalCode,
+        // country_id: country,
         phone: phoneNumber,
-        state_code: province,
+        // state_code: province,
         created_at: date,
         updated_at: date,
       });
@@ -90,9 +85,6 @@ const update = async (req, res) => {
     if (!firstName) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!lastName) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!address) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!city) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!postalCode) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    if (!country) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!phoneNumber) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     const checkid = await db('shippings').first('id').where({ id });
     if (!checkid) return helper.showClientBadRequest(res, 'shipping not exist');
@@ -101,12 +93,8 @@ const update = async (req, res) => {
     await db('shippings').update({
       first_name: firstName,
       last_name: lastName,
-      address,
-      city_id: city,
-      zip: postalCode,
-      country_id: country,
+      full_address: address,
       phone: phoneNumber,
-      state_code: province,
       updated_at: date,
     }).where({ id });
     return helper.showSuccessOk(res, helper.SUCCESS);

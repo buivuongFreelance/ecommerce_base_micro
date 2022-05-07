@@ -26,7 +26,6 @@
     "pg": "^8.6.0",
     "ejs": "^3.1.5",
     "email-templates": "^7.1.0",
-    "micro-helper": "git+https://buivuong1990:vnng@2018@bitbucket.org/dingtoi/functions.git",
     "nodemailer": "^6.4.11",
     "pug": "^3.0.0"
   },

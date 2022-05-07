@@ -1,4 +1,3 @@
-import helper from 'micro-helper';
 import express from 'express';
 import path from 'path';
 
@@ -38,18 +37,19 @@ router.post('/registration', async (req, res) => {
         pass: PASS_SUPPORT,
       },
     });
+    console.log(payload);
     const mailOptions = {
-      from: 'dingtoi@gmail.com',
+      from: 'buivuongdhmo@gmail.com',
       to: payload.email,
       subject: 'email verification',
       html,
     };
     await transporter.sendMail(mailOptions);
-    
-    return helper.showSuccessOk(res, helper.SUCCESS);
+
+    return res.json('success');
   } catch (error) {
     console.log(`error${JSON.stringify(error)}`);
-    return helper.showServerError(res, error);
+    return res.status(500).json(error);
   }
 });
 router.post('/forgotPassword', async (req, res) => {
@@ -88,10 +88,10 @@ router.post('/forgotPassword', async (req, res) => {
       html,
     };
     await transporter.sendMail(mailOptions);
-    return helper.showSuccessOk(res, helper.SUCCESS);
+    return res.json('success');
   } catch (error) {
     console.log(`error${JSON.stringify(error)}`);
-    return helper.showServerError(res, error);
+    return res.status(500).json(error);
   }
 });
 export default router;

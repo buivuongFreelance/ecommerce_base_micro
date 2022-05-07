@@ -10,32 +10,56 @@ build:
   # googleCloudBuild:
   #   projectId: test-db-281ef
   artifacts:
-    - image: ca.tomrot.io/swapez/auth-v1
-      context: auth-v1
+    - image: us.gcr.io/swapez/auth
+      context: auth
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src: "src/**/*.js"
             dest: .
-    - image: ca.tomrot.io/swapez/device-v1
-      context: device-v1
+    - image: us.gcr.io/swapez/cart
+      context: cart
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src: "src/**/*.js"
             dest: .
-    - image: ca.tomrot.io/swapez/cart-v1
-      context: cart-v1
+    - image: us.gcr.io/swapez/device
+      context: device
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src: "src/**/*.js"
             dest: .
-    - image: ca.tomrot.io/swapez/transaction-v1
-      context: transaction-v1
+    - image: us.gcr.io/swapez/model
+      context: model
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.js"
+            dest: .
+    - image: us.gcr.io/swapez/transaction
+      context: transaction
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.js"
+            dest: .
+    - image: us.gcr.io/swapez/proposal
+      context: proposal
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.js"
+            dest: .
+    - image: us.gcr.io/swapez/upload
+      context: upload
       docker:
         dockerfile: Dockerfile
       sync:

@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/v1/auth', router);
 
-app.listen(29995, () => {
+app.listen(20000, () => {
   // eslint-disable-next-line no-console
-  console.log('app is listening to port 29995');
+  console.log('app is listening to port 20000');
 });

@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/v1/cart', router);
 
-app.listen(29997, () => {
+app.listen(3000, () => {
   // eslint-disable-next-line no-console
-  console.log('app is listening to port 29997');
+  console.log('app is listening to port 3000');
 });

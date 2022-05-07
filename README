@@ -6,13 +6,14 @@ kubectl create secret generic cloudinary-api-secret --from-literal=CLOUDINARY_AP
 kubectl create secret generic stripe-api-key --from-literal=STRIPE_API_KEY="sk_test_51HyYmTI5rQzgAhCOfPbGY94MARCfuhPhSXS9gckLp4iBA8bo4pd6vlndxHPLhjdZ4oBfNGswqLK7RDtvZ8fiDfAN00qHxZEB0L"
 kubectl create secret generic shippo-token --from-literal=SHIPPO_TOKEN="shippo_test_fbd312cb5282127d5571a64e650cf23a9fc26249"
 
-kubectl create secret generic redis-host --from-literal=REDIS_HOST="192.168.175.113"
+kubectl create secret generic redis-host --from-literal=REDIS_HOST="192.168.1.9"
 
 kubectl create secret generic client-secret --from-literal=CLIENT_SECRET="deeucfdkq"
 kubectl create secret generic db-user-postgres --from-literal=DB_USER_POSTGRES="tomrot"
 kubectl create secret generic db-pass-postgres --from-literal=DB_PASS_POSTGRES="vnng2018"
 kubectl create secret generic db-database-postgres --from-literal=DB_DATABASE_POSTGRES="tomrot"
 kubectl create secret generic db-port-postgres --from-literal=DB_PORT_POSTGRES="5433"
+kubectl create secret generic db-host-postgres --from-literal=DB_HOST_POSTGRES="192.168.1.9"
 
 kubectl delete secret generic db-host-postgres
 kubectl delete secret generic redis-host
@@ -25,6 +26,7 @@ VPN Pass
 
 Backup
 docker exec -t postgres_test pg_dumpall -c -U tomrot > C:/Users/TP-LAPTOP/Downloads/backup_canada/backup_newest.sql
+docker exec -t postgres_test pg_dump swapez -c -U tomrot > C:/Users/TP-LAPTOP/Downloads/backup_canada/backup_newest1.sql
 
 Restore
 cat C:/Users/TP-LAPTOP/Downloads/backup_canada/backup_newest.sql | docker exec -i postgres_test psql -U tomrot
@@ -64,13 +66,14 @@ KUBECTL KEYS
 kubectl create secret generic jwt-secret --from-literal=JWT_KEY="asdf"
 kubectl create secret generic db-user-postgres --from-literal=DB_USER_POSTGRES="tomrot"
 kubectl create secret generic db-pass-postgres --from-literal=DB_PASS_POSTGRES="vnng2018"
-kubectl create secret generic db-database-postgres --from-literal=DB_DATABASE_POSTGRES="tomrot"
+kubectl create secret generic db-database-postgres --from-literal=DB_DATABASE_POSTGRES="swapez"
 kubectl create secret generic db-port-postgres --from-literal=DB_PORT_POSTGRES="5433"
 kubectl create secret generic shippo-token --from-literal=SHIPPO_TOKEN="shippo_test_ba8a50540cb529119d80513713c2ad91690ba88a"
 kubectl create secret generic stripe-api-key --from-literal=STRIPE_API_KEY="sk_test_51HyYmTI5rQzgAhCOfPbGY94MARCfuhPhSXS9gckLp4iBA8bo4pd6vlndxHPLhjdZ4oBfNGswqLK7RDtvZ8fiDfAN00qHxZEB0L"
 
-kubectl create secret generic db-host-postgres --from-literal=DB_HOST_POSTGRES="192.168.1.5"
+kubectl create secret generic db-host-postgres --from-literal=DB_HOST_POSTGRES="192.168.1.9"
 kubectl delete secret generic db-host-postgres
+kubectl delete secret db-database-postgres
 
 Ingress
 Cài ingress docker desktop
@@ -97,3 +100,15 @@ ADDRESSES
 "zip":"94117",
 "country":"US",
 "email":"shippotle@goshippo.com",
+
+digital ocean
+pass: Zaq1@wsxcde34rfv
+
+ssh root@128.199.186.198
+root ssh: {U9?kB8P
+
+docker exec -t postgres_test pg_dump swapez -c -U tomrot > E:/projects/_backup/backup_swapez.sql
+rsync --progress --partial -avz E:/projects/_backup/ root@128.199.186.198:/home/backup
+cat /home/backup/backup_swapez.sql | docker exec -i postgres_test psql -U tomrot
+
+scp E:/projects/_backup/backup_tomrot.sql root@128.199.186.198:/home/backup

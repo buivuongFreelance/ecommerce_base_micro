@@ -62,9 +62,6 @@ const getListExchange = async (userId) => new Promise((resolve, reject) => {
     .innerJoin('auth_users', 'auth_users.id', 'devices.user_id')
     .innerJoin('proposals', 'proposals.cart_id', 'carts.id')
     .innerJoin('shippings', 'shippings.user_id', 'auth_users.id')
-    .innerJoin('states', 'states.code', 'shippings.state_code')
-    .innerJoin('cities', 'cities.id', 'shippings.city_id')
-    .innerJoin('countries', 'countries.id', 'shippings.country_id')
     .select(
       'carts.id',
       'carts.user_id',
@@ -86,12 +83,6 @@ const getListExchange = async (userId) => new Promise((resolve, reject) => {
       'shippings.address',
       'shippings.first_name',
       'shippings.last_name',
-      'states.code as state_code',
-      'states.name as state',
-      'cities.state_code as city_code',
-      'cities.name as city',
-      'shippings.zip as zip',
-      'countries.country_code_alpha2 as country_code',
       'auth_users.id as seller_id',
       'auth_users.email as seller_email',
     )
@@ -123,9 +114,9 @@ const getListSell = async (userId) => new Promise((resolve, reject) => {
     .innerJoin('device_images', 'devices.id', 'device_images.device_id')
     .innerJoin('auth_users', 'auth_users.id', 'devices.user_id')
     .innerJoin('shippings', 'shippings.user_id', 'auth_users.id')
-    .innerJoin('states', 'states.code', 'shippings.state_code')
-    .innerJoin('cities', 'cities.id', 'shippings.city_id')
-    .innerJoin('countries', 'countries.id', 'shippings.country_id')
+    // .innerJoin('states', 'states.code', 'shippings.state_code')
+    // .innerJoin('cities', 'cities.id', 'shippings.city_id')
+    // .innerJoin('countries', 'countries.id', 'shippings.country_id')
     .select(
       'carts.id',
       'carts.user_id',
@@ -138,25 +129,24 @@ const getListSell = async (userId) => new Promise((resolve, reject) => {
       'categories.name as category_name',
       'brands.name as brand_name',
       'device_images.url',
-      'shippings.address',
+      'shippings.address as full_address',
       'shippings.first_name',
       'shippings.last_name',
-      'states.code as state_code',
-      'states.name as state',
-      'cities.state_code as city_code',
-      'cities.name as city',
-      'shippings.zip as zip',
-      'countries.country_code_alpha2 as country_code',
+      // 'states.code as state_code',
+      // 'states.name as state',
+      // 'cities.state_code as city_code',
+      // 'cities.name as city',
+      // 'countries.country_code_alpha2 as country_code',
       'available_devices.sale_price',
       'available_devices.real_sale_price',
       'auth_users.id as seller_id',
       'auth_users.email as seller_email',
     )
-    .where('available_devices.sale_price', '>', 0)
+    .where('available_devices.real_sale_price', '>', 0)
     .where('carts.type', SELL)
-    .whereNotIn('carts.id', subquery)
     .where('carts.user_id', userId)
     .where('device_images.main', 'true')
+    .whereNotIn('carts.id', subquery)
     .whereNotIn('devices.id', queryNotTransactionSell())
     .whereNotIn('devices.id', queryNotTransactionExchange())
     .orderBy('carts.created_at', 'desc')
@@ -420,6 +410,7 @@ const confirmOrder = async (req, res) => {
       listReturn,
     } = listBeforeCheckout(listExchange, listSell,
       listDeviceTransactions, listCart);
+
     const listFailed = [];
 
     const listGroupedExchange = listReturn.reduce(function (r, a) {
@@ -1453,19 +1444,11 @@ export const orderCreation = async (req, res) => {
     firstNameShip,
     lastNameShip,
     addressShip,
-    cityShip,
-    provinceShip,
-    postalCodeShip,
     phoneShip,
-    countryShip,
     firstNameBill,
     lastNameBill,
     addressBill,
-    cityBill,
-    provinceBill,
-    postalCodeBill,
     phoneBill,
-    countryBill,
     listConfirm,
     cardName,
     cardNumber,
@@ -1486,60 +1469,52 @@ export const orderCreation = async (req, res) => {
       first_name: firstNameShip,
       last_name: lastNameShip,
       address: addressShip,
-      city: cityShip,
-      province: provinceShip,
-      postal_code: postalCodeShip,
       phone: phoneShip,
-      country: countryShip,
     };
     const billingInfo = {
       first_name: firstNameBill,
       last_name: lastNameBill,
       address: addressBill,
-      city: cityBill,
-      province: provinceBill,
-      postal_code: postalCodeBill,
       phone: phoneBill,
-      country: countryBill,
     };
-    const expMonth = exp.toString().substring(0, 2);
-    const expYear = exp.toString().substring(2, 4);
-    const token = await stripe.tokens.create({
-      card: {
-        number: cardNumber,
-        cvc,
-        exp_month: expMonth,
-        exp_year: expYear,
-      },
-    });
+    // const expMonth = exp.toString().substring(0, 2);
+    // const expYear = exp.toString().substring(2, 4);
+    // const token = await stripe.tokens.create({
+    //   card: {
+    //     number: cardNumber,
+    //     cvc,
+    //     exp_month: expMonth,
+    //     exp_year: expYear,
+    //   },
+    // });
 
-    await db.transaction(async (trx) => {
-      if (checkCreditCard) {
-        await trx('credit_cards')
-          .update({
-            number: cardNumber,
-            name: cardName,
-            expiry: exp,
-            cvc,
-            is_saved: false,
-            updated_at: date,
-          })
-          .where({ id: checkCreditCard.id });
-      } else {
-        await trx('credit_cards')
-          .insert({
-            id: uuidv1(),
-            user_id: userId,
-            number: cardNumber,
-            name: cardName,
-            expiry: exp,
-            cvc,
-            is_saved: false,
-            updated_at: date,
-            created_at: date,
-          });
-      }
-    });
+    // await db.transaction(async (trx) => {
+    //   if (checkCreditCard) {
+    //     await trx('credit_cards')
+    //       .update({
+    //         number: cardNumber,
+    //         name: cardName,
+    //         expiry: exp,
+    //         cvc,
+    //         is_saved: false,
+    //         updated_at: date,
+    //       })
+    //       .where({ id: checkCreditCard.id });
+    //   } else {
+    //     await trx('credit_cards')
+    //       .insert({
+    //         id: uuidv1(),
+    //         user_id: userId,
+    //         number: cardNumber,
+    //         name: cardName,
+    //         expiry: exp,
+    //         cvc,
+    //         is_saved: false,
+    //         updated_at: date,
+    //         created_at: date,
+    //       });
+    //   }
+    // });
     const listExchange = await getListExchange(userId);
     const listSell = await getListSell(userId);
     const listDeviceTransactions = await serviceListDeviceTransaction();
@@ -1567,60 +1542,58 @@ export const orderCreation = async (req, res) => {
     const settingTransactionSellerMustScan = await db('settings').first('value').where('key', TIMER.TRANSACTION_SELLER_MUST_SCAN);
     const settingTransactionSellerPayShip = await db('settings').first('value').where('key', TIMER.TRANSACTION_SELLER_PAY_CHECKOUT);
 
-    console.log('asasas', settingTransactionSellerMustScan, settingTransactionSellerPayShip);
-
-    for (const [key, lc] of Object.entries(listConfirm)) {
-      if (lc[0].selectedRate) {
-        const shipResult = await shippo.transaction.create({
-          rate: lc[0].selectedRate.object_id,
-          label_file_type: 'PDF',
-          async: false,
-        });
-        listConfirm[key][0].selectedRatePaid = shipResult;
-        listConfirm[key].map((lck) => {
-          for (let i = 0; i < listReturn.length; i++) {
-            const it = listReturn[i];
-            if (lck.device_id === it.device_id) {
-              it.object_id = lc[0].seller_email;
-              it.shipping_rate_buyer = {
-                selectedRate: lc[0].selectedRate,
-                selectedRatePaid: shipResult,
-                sellerAddress: lc[0].address,
-                sellerCity: lc[0].city,
-                sellerState: lc[0].state_code,
-                sellerPostalCode: lc[0].zip,
-              };
-              break;
-            }
-          }
-        });
-      }
-      if (lc[0].selectedRateExchange) {
-        const shipResult = await shippo.transaction.create({
-          rate: lc[0].selectedRateExchange.object_id,
-          label_file_type: 'PDF',
-          async: false,
-        });
-        listConfirm[key][0].selectedRatePaidExchange = shipResult;
-        listConfirm[key].map((lck) => {
-          for (let i = 0; i < listReturn.length; i++) {
-            const it = listReturn[i];
-            if (lck.device_id === it.device_id) {
-              it.object_id = lc[0].seller_email;
-              it.shipping_rate_buyer = {
-                selectedRate: lc[0].selectedRateExchange,
-                selectedRatePaid: shipResult,
-                sellerAddress: lc[0].address,
-                sellerCity: lc[0].city,
-                sellerState: lc[0].state_code,
-                sellerPostalCode: lc[0].zip,
-              };
-              break;
-            }
-          }
-        });
-      }
-    }
+    // for (const [key, lc] of Object.entries(listConfirm)) {
+    //   if (lc[0].selectedRate) {
+    //     const shipResult = await shippo.transaction.create({
+    //       rate: lc[0].selectedRate.object_id,
+    //       label_file_type: 'PDF',
+    //       async: false,
+    //     });
+    //     listConfirm[key][0].selectedRatePaid = shipResult;
+    //     listConfirm[key].map((lck) => {
+    //       for (let i = 0; i < listReturn.length; i++) {
+    //         const it = listReturn[i];
+    //         if (lck.device_id === it.device_id) {
+    //           it.object_id = lc[0].seller_email;
+    //           it.shipping_rate_buyer = {
+    //             selectedRate: lc[0].selectedRate,
+    //             selectedRatePaid: shipResult,
+    //             sellerAddress: lc[0].address,
+    //             sellerCity: lc[0].city,
+    //             sellerState: lc[0].state_code,
+    //             sellerPostalCode: lc[0].zip,
+    //           };
+    //           break;
+    //         }
+    //       }
+    //     });
+    //   }
+    //   if (lc[0].selectedRateExchange) {
+    //     const shipResult = await shippo.transaction.create({
+    //       rate: lc[0].selectedRateExchange.object_id,
+    //       label_file_type: 'PDF',
+    //       async: false,
+    //     });
+    //     listConfirm[key][0].selectedRatePaidExchange = shipResult;
+    //     listConfirm[key].map((lck) => {
+    //       for (let i = 0; i < listReturn.length; i++) {
+    //         const it = listReturn[i];
+    //         if (lck.device_id === it.device_id) {
+    //           it.object_id = lc[0].seller_email;
+    //           it.shipping_rate_buyer = {
+    //             selectedRate: lc[0].selectedRateExchange,
+    //             selectedRatePaid: shipResult,
+    //             sellerAddress: lc[0].address,
+    //             sellerCity: lc[0].city,
+    //             sellerState: lc[0].state_code,
+    //             sellerPostalCode: lc[0].zip,
+    //           };
+    //           break;
+    //         }
+    //       }
+    //     });
+    //   }
+    // }
 
     for (let i = 0; i < listReturn.length; i++) {
       const it = listReturn[i];
@@ -1852,12 +1825,12 @@ export const orderCreation = async (req, res) => {
     const walletsGlobal = await db('auth_users').first('email', 'wallet').whereIn('email', [GLOBAL_USER]);
     const walletGlobal = Number(walletsGlobal.wallet);
 
-    const charge = await stripe.charges.create({
-      amount: Math.ceil(amount) * 100,
-      currency: 'cad',
-      source: token.id,
-      description: 'Payment for dingtoi',
-    });
+    // const charge = await stripe.charges.create({
+    //   amount: Math.ceil(amount) * 100,
+    //   currency: 'cad',
+    //   source: token.id,
+    //   description: 'Payment for dingtoi',
+    // });
 
     const optionTransactionSellerMustScan = QUEUE.OPTION_DEFAULT;
     const optionOrderSellerPayShip = QUEUE.OPTION_DEFAULT;
@@ -1893,7 +1866,7 @@ export const orderCreation = async (req, res) => {
         status,
         shipping_info: shippingInfo,
         billing_info: billingInfo,
-        charge_stripe: charge.id,
+        // charge_stripe: charge.id,
         created_at: date,
         updated_at: date,
         invoice_info: listConfirm,

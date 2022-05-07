@@ -25,7 +25,7 @@
     "nodemon": "^2.0.7",
     "pg": "^8.6.0",
     "socket.io-client": "^2.3.1",
-    "micro-helper": "git+https://buivuong1990:vnng@2018@bitbucket.org/dingtoi/functions.git",
+    "micro-helper": "1.0.3",
     "uuid": "^8.3.0",
     "is_js": "^0.9.0",
     "bull": "^3.20.0"

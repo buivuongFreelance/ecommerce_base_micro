@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/v1/upload', router);
 
-app.listen(30001, () => {
+app.listen(3000, () => {
   // eslint-disable-next-line no-console
-  console.log('app is listening to port 30001');
+  console.log('app is listening to port 3000');
 });

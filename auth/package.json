@@ -30,7 +30,7 @@
     "generate-password": "^1.5.1",
     "is_js": "^0.9.0",
     "jsonwebtoken": "^8.5.1",
-    "micro-helper": "git+https://buivuong1990:vnng@2018@bitbucket.org/dingtoi/functions.git",
+    "micro-helper": "1.0.3",
     "multer": "^1.4.2",
     "multer-storage-cloudinary": "^4.0.0",
     "uuid": "^8.3.0"
