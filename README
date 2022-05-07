@@ -116,3 +116,4 @@ scp E:/projects/_backup/backup_tomrot.sql root@128.199.186.198:/home/backup
 pm2 start "npm run dev" --name micro-auth
 pm2 start "npm run dev" --name micro-cart
 pm2 start "npm run dev" --name micro-device
+pm2 start "npm run dev" --name micro-model
