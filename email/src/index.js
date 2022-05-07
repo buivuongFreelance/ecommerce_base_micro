@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/v1/email', router);
 
-app.listen(4000, () => {
+app.listen(30000, () => {
   // eslint-disable-next-line no-console
-  console.log('app is listening to port 4000');
+  console.log('app is listening to port 30000');
 });
