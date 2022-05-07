@@ -117,3 +117,4 @@ pm2 start "npm run dev" --name micro-auth
 pm2 start "npm run dev" --name micro-cart
 pm2 start "npm run dev" --name micro-device
 pm2 start "npm run dev" --name micro-model
+pm2 start "npm run dev" --name micro-socket
