@@ -60,10 +60,10 @@ const registration = async (req, res) => {
       created_at: date,
       updated_at: date,
     });
-    // const api = `${URL_ACTIVE}/verify/${activeCode}`;
-    const api = `http://192.168.1.9/api/v1/auth/verify/${activeCode}`;
-    //const url = `${DOMAIN_DRIVEN_EMAIL}/registration`;
-    const url = `http://192.168.1.9:4000/api/v1/email/registration`;
+    const api = `${URL_ACTIVE}/verify/${activeCode}`;
+    // const api = `http://192.168.1.9/api/v1/auth/verify/${activeCode}`;
+    const url = `${DOMAIN_DRIVEN_EMAIL}/registration`;
+    // const url = `http://192.168.1.9:4000/api/v1/email/registration`;
     sendEmail.sendEmailRegistration(email, api, url);
     return helper.showClientSuccess(res, 'Check email for authentication');
   } catch (error) {

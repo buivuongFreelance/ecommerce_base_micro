@@ -5,8 +5,8 @@ import { POSTED, WAITING_FOR_SCAN, CREATED } from '../config';
 import { checkDeviceScanOrNotScan } from '../functions';
 
 export const removeOrder = async (req, res) => {
-
   const { id } = req.body;
+  console.log(id);
   if (!id) return helper.showClientEmpty(res);
 
   try {
@@ -78,7 +78,6 @@ export const removeOrder = async (req, res) => {
 };
 
 export const listOrder = async (req, res) => {
-
   const { offset, limit } = req.body;
   if (!limit) return helper.showClientEmpty(res);
   // if (!filter) return helper.showClientEmpty(res);

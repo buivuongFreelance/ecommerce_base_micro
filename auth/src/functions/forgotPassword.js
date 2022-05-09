@@ -38,10 +38,10 @@ const forgotPassword = async (req, res) => {
 
     const token = uuidv1();
 
-    // const api = `${URL_RESET_PASS}?token=${token}`;
-    const api = `http://localhost:3000/reset-password?token=${token}`;
-    // const url = `${DOMAIN_DRIVEN_EMAIL}/forgotPassword`;
-    const url = `http://192.168.1.9:4000/api/v1/email/forgotPassword`;
+    const api = `${URL_RESET_PASS}?token=${token}`;
+    // const api = `http://localhost:3000/reset-password?token=${token}`;
+    const url = `${DOMAIN_DRIVEN_EMAIL}/forgotPassword`;
+    // const url = `http://192.168.1.9:4000/api/v1/email/forgotPassword`;
 
     sendEmail.sendEmailForgotPassword(email, ramdomPassword, url, api);
     await db('auth_users').update({ password_reset_token: token }).where('email', email);
