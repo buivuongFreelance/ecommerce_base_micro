@@ -122,3 +122,4 @@ pm2 start "npm run dev" --name micro-upload
 pm2 start "npm run dev" --name micro-transaction
 pm2 start "npm run dev" --name micro-proposal
 pm2 start "npm run dev" --name micro-email
+pm2 start "npm run dev" --name micro-mobile
