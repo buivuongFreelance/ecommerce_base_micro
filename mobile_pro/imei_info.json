@@ -1,0 +1,66 @@
+{
+  "data": [
+    {
+      "RefCode": "16082020054514",
+      "ResponseStatus": "success",
+      "deviceid": "359835100353669",
+      "partnerid": "diskdaddy",
+      "branchid": "Stittsville, ON",
+      "BlacklistStatus": "No",
+      "DeviceDetails": {
+        "Manufacturer": "Samsung Korea",
+        "BrandName": "Samsung",
+        "ModelName": "SM-A205F/DS",
+        "MarketingName": "Galaxy A20",
+        "OperatingSystem": "Android",
+        "WLAN": "Yes",
+        "NFC": "No",
+        "Bluetooth": "Yes",
+        "DeviceType": "Smartphone"
+      },
+      "DeviceHistory": [
+        {
+          "DateReported": "08-16-2020 05:26:38",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-16-2020 05:27:22",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-16-2020 05:29:22",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-16-2020 05:38:57",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-16-2020 05:41:05",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        }
+      ]
+    }
+  ],
+  "error": null
+}

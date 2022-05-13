@@ -1,0 +1,175 @@
+{
+  "data": [
+    {
+      "RefCode": "16082020055938",
+      "ResponseStatus": "success",
+      "deviceid": "35930506536758",
+      "partnerid": "diskdaddy",
+      "branchid": "Stittsville, ON",
+      "BlacklistStatus": "Yes",
+      "DeviceDetails": {
+        "Manufacturer": "Apple Inc",
+        "BrandName": "Apple",
+        "ModelName": "iPhone 6 (A1549)",
+        "MarketingName": "Apple iPhone 6 (A1549)",
+        "OperatingSystem": "iOS",
+        "WLAN": "Yes",
+        "NFC": "Yes",
+        "Bluetooth": "Yes",
+        "DeviceType": "Smartphone"
+      },
+      "DeviceHistory": [
+        {
+          "DateReported": "01-29-2016 03:14:19",
+          "Organisation": "Verizon Wireless",
+          "OrganisationType": "Cellular Carrier",
+          "Country": "United States",
+          "Action": "Reported Lost or Stolen",
+          "Reason": "Stolen or Lost"
+        },
+        {
+          "DateReported": "09-12-2016 21:49:59",
+          "Organisation": "Verizon Wireless",
+          "OrganisationType": "Cellular Carrier",
+          "Country": "United States",
+          "Action": "Lost and Found",
+          "Reason": "Found"
+        },
+        {
+          "DateReported": "09-26-2016 17:43:46",
+          "Organisation": "Verizon Wireless",
+          "OrganisationType": "Cellular Carrier",
+          "Country": "United States",
+          "Action": "Reported Lost or Stolen",
+          "Reason": "Stolen or Lost"
+        },
+        {
+          "DateReported": "08-13-2020 10:33:13",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-13-2020 10:37:09",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-16-2020 05:43:51",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-16-2020 05:55:33",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        }
+      ]
+    },
+    {
+      "RefCode": "16082020055938",
+      "ResponseStatus": "success",
+      "deviceid": "35315906424589",
+      "partnerid": "diskdaddy",
+      "branchid": "Stittsville, ON",
+      "BlacklistStatus": "Yes",
+      "DeviceDetails": {
+        "Manufacturer": "Infosonics Corp",
+        "BrandName": "verykool",
+        "ModelName": "i129",
+        "MarketingName": "verykool i129",
+        "OperatingSystem": "Spreadtrum",
+        "WLAN": "No",
+        "NFC": "No",
+        "Bluetooth": "Yes",
+        "DeviceType": "Mobile Phone/Feature phone"
+      },
+      "DeviceHistory": [
+        {
+          "DateReported": "06-28-2015 10:16:41",
+          "Organisation": "America Movil Peru",
+          "OrganisationType": "Cellular Carrier",
+          "Country": "Peru",
+          "Action": "Reported Lost or Stolen",
+          "Reason": "Stolen or Lost"
+        },
+        {
+          "DateReported": "06-29-2015 10:15:09",
+          "Organisation": "America Movil Peru",
+          "OrganisationType": "Cellular Carrier",
+          "Country": "Peru",
+          "Action": "Lost and Found",
+          "Reason": "Found"
+        },
+        {
+          "DateReported": "01-29-2016 09:16:29",
+          "Organisation": "America Movil Peru",
+          "OrganisationType": "Cellular Carrier",
+          "Country": "Peru",
+          "Action": "Reported Lost or Stolen",
+          "Reason": "Stolen or Lost"
+        },
+        {
+          "DateReported": "04-18-2018 06:13:26",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-13-2020 10:09:27",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-13-2020 10:33:13",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-13-2020 11:03:16",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-16-2020 05:43:51",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        },
+        {
+          "DateReported": "08-16-2020 05:55:33",
+          "Organisation": "Canadian Wireless Telecommunications Association",
+          "OrganisationType": "Public",
+          "Country": "Canada",
+          "Action": "IMEI Checked",
+          "Reason": "-"
+        }
+      ]
+    }
+  ],
+  "error": null
+}
