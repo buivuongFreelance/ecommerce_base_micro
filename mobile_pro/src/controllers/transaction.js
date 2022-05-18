@@ -18,8 +18,6 @@ export const checkQrCode = async (req, res) => {
     deviceId, email,
   } = req.body;
 
-  console.log(deviceId, email);
-
   try {
     let transaction = await db('transactions')
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
@@ -59,10 +57,9 @@ export const transactionCompareDevice = async (req, res) => {
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
       .innerJoin('device_scans', 'device_scans.real_device_id', 'devices.id')
       .innerJoin('available_devices', 'available_devices.device_id', 'devices.id')
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
-      .first('device_scans.timestamp', 'device_scans.main_info', 'device_scans.main_url', 'device_scans.type', 'device_scans.created_at', 'imeis.imei')
+      .first('device_scans.timestamp', 'device_scans.main_info', 'device_scans.main_url', 'device_scans.type', 'device_scans.created_at', 'devices.model as imei')
       .where('available_devices.device_app_id', transactionCode)
-      .where('device_scans.type', 'transaction-summary')
+      .where('device_scans.type', 'transactionCodeLockScan-summary')
       .orderBy('device_scans.created_at', 'desc');
 
     let ownerScan = await db('transactions')
@@ -71,7 +68,7 @@ export const transactionCompareDevice = async (req, res) => {
       .innerJoin('device_scans', 'device_scans.real_device_id', 'devices.id')
       .first('device_scans.timestamp', 'device_scans.main_info', 'device_scans.main_url', 'device_scans.type', 'device_scans.created_at')
       .where('available_devices.device_app_id', transactionCode)
-      .where('device_scans.type', 'basic-summary')
+      .where('device_scans.type', 'transaction-summary')
       .orderBy('device_scans.created_at', 'desc');
 
     if (!myScan) {
@@ -99,10 +96,9 @@ export const transactionCompareDevice = async (req, res) => {
         .innerJoin('devices', 'devices.id', 'transactions.device_id')
         .innerJoin('device_scans', 'device_scans.real_device_id', 'devices.id')
         .innerJoin('available_devices', 'available_devices.device_id', 'devices.id')
-        .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
-        .first('device_scans.timestamp', 'device_scans.main_info', 'device_scans.main_url', 'device_scans.type', 'device_scans.created_at', 'imeis.imei')
+        .first('device_scans.timestamp', 'device_scans.main_info', 'device_scans.main_url', 'device_scans.type', 'device_scans.created_at', 'devices.model as imei')
         .where('available_devices.device_app_id', transactionCode)
-        .where('device_scans.type', 'transactionCodeLockScan-summary')
+        .where('device_scans.type', 'transaction-summary')
         .orderBy('device_scans.created_at', 'desc');
       if (!myScan) {
         myScan = await db('transactions_exchange')
@@ -148,7 +144,7 @@ export const transactionBuyerAccept = async (req, res) => {
         'transactions.order_seller_id',
         'transactions.id as transaction_id',
         'auth_users.email as seller_email',
-        'models.name as device_name',
+        'devices.model as device_name',
         'capacities.value as capacity_name',
         'colors.name as color_name',
         'devices.id as device_id',
@@ -157,11 +153,9 @@ export const transactionBuyerAccept = async (req, res) => {
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
       .innerJoin('available_devices', 'available_devices.device_id', 'devices.id')
       .innerJoin('auth_users', 'auth_users.id', 'devices.user_id')
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
       .innerJoin('rams', 'devices.ram_id', 'rams.id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
       .where('available_devices.device_app_id', transactionCode)
       .orderBy('transactions.created_at', 'desc');
 
@@ -372,7 +366,7 @@ export const transactionBuyerReject = async (req, res) => {
         'transactions.id as transaction_id',
         'auth_users.email as seller_email',
         'auth_users.id as seller_id',
-        'models.name as device_name',
+        'devices.model as device_name',
         'capacities.value as capacity_name',
         'colors.name as color_name',
         'devices.id as device_id',
@@ -381,11 +375,9 @@ export const transactionBuyerReject = async (req, res) => {
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
       .innerJoin('available_devices', 'available_devices.device_id', 'devices.id')
       .innerJoin('auth_users', 'auth_users.id', 'devices.user_id')
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
       .innerJoin('rams', 'devices.ram_id', 'rams.id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
       .where('available_devices.device_app_id', transactionCode)
       .orderBy('transactions.created_at', 'desc');
 

@@ -149,45 +149,47 @@ const add = async (req, res) => {
   const { userId } = req;
   try {
     const {
-      modelId, imei, physicalGrading, ramId, capacityId, colorId,
+      imei, physicalGrading, ramId, capacityId, colorId, brandId,
     } = req.body;
-    if (!modelId) return helper.showClientBadRequest(res, helper.ERR_COMMON);
+    // if (!modelId) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!imei) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!ramId) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!physicalGrading) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!capacityId) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!colorId) return helper.showClientBadRequest(res, helper.ERR_COMMON);
-    const checkDeviceImei = await db('devices')
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
-      .first('devices.id')
-      .where('imeis.imei', imei);
+    if (!brandId) return helper.showClientBadRequest(res, helper.ERR_COMMON);
+    // const checkDeviceImei = await db('devices')
+    //   .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
+    //   .first('devices.id')
+    //   .where('imeis.imei', imei);
 
-    console.log(checkDeviceImei);
-    if (checkDeviceImei) return helper.showClientBadRequest(res, helper.ERR_EXIST);
+    // if (checkDeviceImei) return helper.showClientBadRequest(res, helper.ERR_EXIST);
 
-    const checkImei = await db('imeis')
-      .first('id')
-      .where('imei', imei);
-    const idImei = uuidv1();
+    // const checkImei = await db('imeis')
+    //   .first('id')
+    //   .where('imei', imei);
+    // const idImei = uuidv1();
     const idDevice = uuidv1();
     const date = new Date();
 
     await db.transaction(async (trx) => {
-      if (!checkImei) {
-        await trx('imeis').insert({
-          id: idImei,
-          imei,
-          model_id: modelId,
-          ram_id: ramId,
-          capacity_id: capacityId,
-          color_id: colorId,
-          created_at: date,
-          updated_at: date,
-        });
-      }
+      // if (!checkImei) {
+      //   await trx('imeis').insert({
+      //     id: idImei,
+      //     imei,
+      //     model_id: modelId,
+      //     ram_id: ramId,
+      //     capacity_id: capacityId,
+      //     color_id: colorId,
+      //     created_at: date,
+      //     updated_at: date,
+      //   });
+      // }
       await trx('devices').insert({
         id: idDevice,
-        imei_id: checkImei ? checkImei.id : idImei,
+        imei_id: null,
+        brand_id: brandId,
+        model: imei,
         user_id: userId,
         physical_grading: physicalGrading,
         ram_id: ramId,
@@ -273,20 +275,20 @@ const remove = async (req, res) => {
       await trx('device_scans').where('real_device_id', id).del();
       await trx('devices').where('id', id).del();
     });
-    if (images.length > 0) {
-      let names = images[0].public_id;
-      // eslint-disable-next-line no-plusplus
-      for (let i = 1; i < images.length; i++) {
-        names += `,${images[i].public_id}`;
-      }
-      try {
-        await axios.post(`${DOMAIN_DRIVEN_UPLOAD}deleteMultipleImage`, {
-          names,
-        });
-      } catch (errorImg) {
-        throw new Error('image');
-      }
-    }
+    // if (images.length > 0) {
+    //   let names = images[0].public_id;
+    //   // eslint-disable-next-line no-plusplus
+    //   for (let i = 1; i < images.length; i++) {
+    //     names += `,${images[i].public_id}`;
+    //   }
+    //   try {
+    //     await axios.post(`${DOMAIN_DRIVEN_UPLOAD}deleteMultipleImage`, {
+    //       names,
+    //     });
+    //   } catch (errorImg) {
+    //     throw new Error('image');
+    //   }
+    // }
 
     return helper.showSuccessOk(res, helper.SUCCESS);
   } catch (error) {
@@ -302,7 +304,7 @@ const modify = async (req, res) => {
     const checkId = await db('devices').first('id', 'status').where('id', id);
     if (!check.existy(checkId)) return helper.showClientBadRequest(res, 'device not exist');
     const {
-      physicalGrading, ramId, capacityId, colorId,
+      physicalGrading, ramId, capacityId, colorId, brandId,
     } = req.body;
     const schema = Joi.object({
       physicalGrading: Joi.string().pattern(new RegExp(/^[ABCDabcd]+$/)),
@@ -317,6 +319,7 @@ const modify = async (req, res) => {
     if (!physicalGrading) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!capacityId) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     if (!colorId) return helper.showClientBadRequest(res, helper.ERR_COMMON);
+    if (!brandId) return helper.showClientBadRequest(res, helper.ERR_COMMON);
     const date = new Date();
     if (checkId.status !== CREATED) {
       const images = await db('device_images').select('public_id').where('device_id', id);
@@ -327,6 +330,7 @@ const modify = async (req, res) => {
             ram_id: ramId,
             capacity_id: capacityId,
             color_id: colorId,
+            brand_id: brandId,
             updated_at: date,
             status: CREATED,
           })
@@ -368,6 +372,7 @@ const modify = async (req, res) => {
           ram_id: ramId,
           capacity_id: capacityId,
           color_id: colorId,
+          brand_id: brandId,
           updated_at: date,
         })
         .where({ id });
@@ -385,13 +390,13 @@ const detail = async (req, res) => {
     if (!check.existy(checkId)) return helper.showClientBadRequest(res, 'device not exist');
     const detailDevice = await db('devices')
       .leftJoin('available_devices', 'devices.id', 'available_devices.device_id')
-      .join('imeis', 'imeis.id', 'devices.imei_id')
+      // .join('imeis', 'imeis.id', 'devices.imei_id')
       .join('rams', 'rams.id', 'devices.ram_id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
-      .innerJoin('categories', 'models.category_id', 'categories.id')
-      .innerJoin('brands', 'models.brand_id', 'brands.id')
+      // .innerJoin('models', 'imeis.model_id', 'models.id')
+      // .innerJoin('categories', 'models.category_id', 'categories.id')
+      .innerJoin('brands', 'devices.brand_id', 'brands.id')
       .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
       .leftJoin('transactions', 'transactions.device_id', 'devices.id')
       .leftJoin('transactions_exchange', 'transactions_exchange.device_id', 'devices.id')
@@ -412,20 +417,20 @@ const detail = async (req, res) => {
         'devices.status',
         'devices.created_at',
         'devices.id',
-        'imeis.id as imei_id',
-        'imeis.imei as imei',
-        'imeis.other_detail',
-        'imeis.original_price',
+        // 'imeis.id as imei_id',
+        // 'imeis.imei as imei',
+        // 'imeis.other_detail',
+        // 'imeis.original_price',
         'devices.ram_id as ram_id',
         'rams.value as ram_value',
         'colors.id as color_id',
         'colors.name as color',
         'capacities.id as capacity_id',
         'capacities.value as capacity',
-        'models.id as model_id',
-        'models.name as model',
-        'categories.id as category_id',
-        'categories.name as category_name',
+        // 'models.id as model_id',
+        'devices.model as model',
+        // 'categories.id as category_id',
+        // 'categories.name as category_name',
         'brands.id as brand_id',
         'brands.name as brand_name',
         'device_scans.main_info',

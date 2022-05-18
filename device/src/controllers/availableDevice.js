@@ -45,26 +45,17 @@ const listWishlist = async (req, res) => {
 
       const list = await db('devices')
         .leftJoin('available_devices', 'devices.id', 'available_devices.device_id')
-        .join('imeis', 'devices.imei_id', 'imeis.id')
         .leftJoin('device_images', 'devices.id', 'device_images.device_id')
         .innerJoin('rams', 'devices.ram_id', 'rams.id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
         .innerJoin(
           db('wishlists')
             .select('id', 'device_id', 'created_at')
             .where('user_id', userId).as('wishlists'),
           'devices.id', 'wishlists.device_id',
-        )
-        .leftJoin(
-          db('device_tags')
-            .select('id', 'model_id', 'created_at')
-            .where('user_id', userId).as('device_tags'),
-          'models.id', 'device_tags.model_id',
         )
         .select(
           'available_devices.sale_price',
@@ -75,19 +66,15 @@ const listWishlist = async (req, res) => {
           'devices.id as device_id',
           'devices.status',
           'devices.physical_grading',
-          'imeis.id as imei_id',
           'rams.value as ram',
           'colors.name as color',
           'capacities.value as capacity',
-          'models.name as model',
-          'categories.name as category_name',
-          'categories.image_url as category_image_url',
           'brands.id as brand_id',
           'brands.name as brand_name',
           'brands.image_url as brand_image_url',
           'device_images.url',
+          'devices.model as model',
           'wishlists.id as wishlist_id',
-          'device_tags.id as device_tag',
           db.raw('device_scans.main_info -> \'diamondRating\' AS dingtoi_rating'),
           db.raw('device_scans.main_info -> \'url_summary_report\' AS dingtoi_scan_image'),
         )
@@ -104,14 +91,11 @@ const listWishlist = async (req, res) => {
 
       const countRow = await db('devices')
         .leftJoin('available_devices', 'devices.id', 'available_devices.device_id')
-        .join('imeis', 'devices.imei_id', 'imeis.id')
         .leftJoin('device_images', 'devices.id', 'device_images.device_id')
         .innerJoin('rams', 'devices.ram_id', 'rams.id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
         .innerJoin(
           db('wishlists')
@@ -473,13 +457,10 @@ const availableDeviceDetail = async (req, res) => {
 
       const detailDevice = await db('devices')
         .leftJoin('available_devices', 'devices.id', 'available_devices.device_id')
-        .join('imeis', 'imeis.id', 'devices.imei_id')
         .join('rams', 'rams.id', 'devices.ram_id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
         .leftOuterJoin(
           db('carts')
@@ -492,12 +473,6 @@ const availableDeviceDetail = async (req, res) => {
             .select('id', 'device_id')
             .where('user_id', userId).as('wishlists'),
           'devices.id', 'wishlists.device_id',
-        )
-        .leftJoin(
-          db('device_tags')
-            .select('id', 'model_id', 'created_at')
-            .where('user_id', userId).as('device_tags'),
-          'models.id', 'device_tags.model_id',
         )
         .first(
           'available_devices.id as available_id',
@@ -514,10 +489,6 @@ const availableDeviceDetail = async (req, res) => {
           'devices.status',
           'devices.created_at',
           'devices.id',
-          'imeis.id as imei_id',
-          'imeis.imei as imei',
-          'imeis.other_detail',
-          'imeis.original_price',
           'devices.ram_id as ram_id',
           'rams.value as ram_value',
           'colors.id as color_id',
@@ -525,14 +496,10 @@ const availableDeviceDetail = async (req, res) => {
           'colors.color_code',
           'capacities.id as capacity_id',
           'capacities.value as capacity',
-          'models.id as model_id',
-          'models.name as model',
-          'categories.id as category_id',
-          'categories.name as category_name',
+          'devices.model as model',
           'brands.id as brand_id',
           'brands.name as brand_name',
           'device_scans.main_info',
-          'device_tags.id as device_tag',
           'carts.id as cart_id',
           'carts.type as cart_type',
           'wishlists.id as wishlist_id',
@@ -557,13 +524,10 @@ const availableDeviceDetail = async (req, res) => {
 
       const detailDevice = await db('devices')
         .leftJoin('available_devices', 'devices.id', 'available_devices.device_id')
-        .join('imeis', 'imeis.id', 'devices.imei_id')
         .join('rams', 'rams.id', 'devices.ram_id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
         .leftOuterJoin(
           db('tracing_carts')
@@ -592,10 +556,6 @@ const availableDeviceDetail = async (req, res) => {
           'devices.status',
           'devices.created_at',
           'devices.id',
-          'imeis.id as imei_id',
-          'imeis.imei as imei',
-          'imeis.other_detail',
-          'imeis.original_price',
           'devices.ram_id as ram_id',
           'rams.value as ram_value',
           'colors.id as color_id',
@@ -603,10 +563,7 @@ const availableDeviceDetail = async (req, res) => {
           'colors.color_code',
           'capacities.id as capacity_id',
           'capacities.value as capacity',
-          'models.id as model_id',
-          'models.name as model',
-          'categories.id as category_id',
-          'categories.name as category_name',
+          'devices.model as model',
           'brands.id as brand_id',
           'brands.name as brand_name',
           'device_scans.main_info',
@@ -721,7 +678,7 @@ const waitingForScan = async (req, res) => {
       //     "url_summary_report": "https://res.cloudinary.com/deeucfdkq/image/upload/v1617335198/uh6hp6bsgk3oqnmqqfrf.png"
       //   }
       // });
-      //END ADD REMOVE LATER
+      // END ADD REMOVE LATER
       if (checkDeviceId.status === CREATED) {
         await trx('devices').update({ status: WAITING_FOR_SCAN }).where('id', deviceId);
       }
@@ -840,20 +797,20 @@ const deleteWaitingForScan = async (req, res) => {
       await trx('device_images').where('device_id', checkId.device_id).del();
       await trx('devices').update({ status: 'CREATED' }).where('id', checkId.device_id);
     });
-    if (images.length > 0) {
-      let names = images[0].public_id;
-      // eslint-disable-next-line no-plusplus
-      for (let i = 1; i < images.length; i++) {
-        names += `,${images[i].public_id}`;
-      }
-      try {
-        await axios.post(`${DOMAIN_DRIVEN_UPLOAD}deleteMultipleImage`, {
-          names,
-        });
-      } catch (errorImg) {
-        throw new Error('image');
-      }
-    }
+    // if (images.length > 0) {
+    //   let names = images[0].public_id;
+    //   // eslint-disable-next-line no-plusplus
+    //   for (let i = 1; i < images.length; i++) {
+    //     names += `,${images[i].public_id}`;
+    //   }
+    //   try {
+    //     await axios.post(`${DOMAIN_DRIVEN_UPLOAD}deleteMultipleImage`, {
+    //       names,
+    //     });
+    //   } catch (errorImg) {
+    //     throw new Error('image');
+    //   }
+    // }
     return helper.showSuccessOk(res, helper.SUCCESS);
   } catch (error) {
     return helper.showServerError(res, error);
@@ -991,26 +948,17 @@ const deviceListSearch = async (req, res) => {
 
       const query = db('devices')
         .innerJoin('available_devices', 'devices.id', 'available_devices.device_id')
-        .join('imeis', 'devices.imei_id', 'imeis.id')
         .leftJoin('device_images', 'devices.id', 'device_images.device_id')
         .innerJoin('rams', 'devices.ram_id', 'rams.id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
         .leftJoin(
           db('wishlists')
             .select('id', 'device_id', 'created_at')
             .where('user_id', userId).as('wishlists'),
           'devices.id', 'wishlists.device_id',
-        )
-        .leftJoin(
-          db('device_tags')
-            .select('id', 'model_id', 'created_at')
-            .where('user_id', userId).as('device_tags'),
-          'models.id', 'device_tags.model_id',
         )
         .select(
           'available_devices.sale_price',
@@ -1021,26 +969,22 @@ const deviceListSearch = async (req, res) => {
           'devices.id as device_id',
           'devices.status',
           'devices.physical_grading',
-          'imeis.id as imei_id',
           'rams.value as ram',
           'colors.name as color',
           'capacities.value as capacity',
-          'models.name as model',
-          'categories.name as category_name',
-          'categories.image_url as category_image_url',
+          'devices.model as model',
           'brands.id as brand_id',
           'brands.name as brand_name',
           'brands.image_url as brand_image_url',
           'device_images.url',
           'wishlists.id as wishlist_id',
-          'device_tags.id as device_tag',
           db.raw('device_scans.main_info -> \'diamondRating\' AS dingtoi_rating'),
           db.raw('device_scans.main_info -> \'url_summary_report\' AS dingtoi_scan_image'),
         )
         .where('devices.status', POSTED)
         .where('devices.status', '<>', COMPLETED)
         .where('device_images.main', 'true')
-        .where('models.name', 'ILIKE', `%${name}%`)
+        .where('devices.model', 'ILIKE', `%${name}%`)
         .whereNotIn('devices.user_id', listUserIds)
         .whereNotIn('devices.id', subquery)
         .whereNotIn('devices.id', queryNotTransactionSell())
@@ -1048,20 +992,17 @@ const deviceListSearch = async (req, res) => {
 
       const queryCount = db('devices')
         .innerJoin('available_devices', 'devices.id', 'available_devices.device_id')
-        .join('imeis', 'devices.imei_id', 'imeis.id')
         .leftJoin('device_images', 'devices.id', 'device_images.device_id')
         .innerJoin('rams', 'devices.ram_id', 'rams.id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
         .count('devices.id', { as: 'count' })
         .where('devices.status', POSTED)
         .where('devices.status', '<>', COMPLETED)
         .where('device_images.main', 'true')
-        .where('models.name', 'ILIKE', `%${name}%`)
+        .where('devices.model', 'ILIKE', `%${name}%`)
         .whereNotIn('devices.user_id', listUserIds)
         .whereNotIn('devices.id', subquery)
         .whereNotIn('devices.id', queryNotTransactionSell())
@@ -1074,9 +1015,9 @@ const deviceListSearch = async (req, res) => {
         } else if (sort.name === 'price_desc') {
           query.orderBy('available_devices.real_sale_price', 'desc');
         } else if (sort.name === 'name_asc') {
-          query.orderBy('models.name', 'asc');
+          query.orderBy('devices.model', 'asc');
         } else if (sort.name === 'name_desc') {
-          query.orderBy('models.name', 'desc');
+          query.orderBy('devices.model', 'desc');
         } else if (sort.name === 'date_asc') {
           query.orderBy('available_devices.created_at', 'asc');
         } else if (sort.name === 'date_desc') {
@@ -1140,14 +1081,11 @@ const deviceListSearch = async (req, res) => {
 
       const query = db('devices')
         .leftJoin('available_devices', 'devices.id', 'available_devices.device_id')
-        .join('imeis', 'devices.imei_id', 'imeis.id')
         .leftJoin('device_images', 'devices.id', 'device_images.device_id')
         .innerJoin('rams', 'devices.ram_id', 'rams.id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
         .leftOuterJoin('tracing_carts', 'devices.id', 'tracing_carts.device_id')
         .leftJoin(
@@ -1165,13 +1103,10 @@ const deviceListSearch = async (req, res) => {
           'devices.id as device_id',
           'devices.status',
           'devices.physical_grading',
-          'imeis.id as imei_id',
           'rams.value as ram',
           'colors.name as color',
           'capacities.value as capacity',
-          'models.name as model',
-          'categories.name as category_name',
-          'categories.image_url as category_image_url',
+          'devices.model as model',
           'brands.id as brand_id',
           'brands.name as brand_name',
           'brands.image_url as brand_image_url',
@@ -1186,25 +1121,22 @@ const deviceListSearch = async (req, res) => {
         .whereNotIn('devices.id', subquery)
         .whereNotIn('devices.id', queryNotTransactionSell())
         .whereNotIn('devices.id', queryNotTransactionExchange())
-        .where('models.name', 'ILIKE', `%${name}%`);
+        .where('devices.model', 'ILIKE', `%${name}%`);
 
       const queryCount = db('devices')
         .leftJoin('available_devices', 'devices.id', 'available_devices.device_id')
-        .join('imeis', 'devices.imei_id', 'imeis.id')
         .leftJoin('device_images', 'devices.id', 'device_images.device_id')
         .innerJoin('rams', 'devices.ram_id', 'rams.id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
         .leftOuterJoin('tracing_carts', 'devices.id', 'tracing_carts.device_id')
         .count('devices.id', { as: 'count' })
         .where('devices.status', POSTED)
         .where('devices.status', '<>', COMPLETED)
         .where('device_images.main', 'true')
-        .where('models.name', 'ILIKE', `%${name}%`)
+        .where('devices.model', 'ILIKE', `%${name}%`)
         .whereNotIn('devices.id', subquery)
         .whereNotIn('devices.id', queryNotTransactionSell())
         .whereNotIn('devices.id', queryNotTransactionExchange())
@@ -1216,9 +1148,9 @@ const deviceListSearch = async (req, res) => {
         } else if (sort.name === 'price_desc') {
           query.orderBy('available_devices.real_sale_price', 'desc');
         } else if (sort.name === 'name_asc') {
-          query.orderBy('models.name', 'asc');
+          query.orderBy('devices.model', 'asc');
         } else if (sort.name === 'name_desc') {
-          query.orderBy('models.name', 'desc');
+          query.orderBy('devices.model', 'desc');
         } else if (sort.name === 'date_asc') {
           query.orderBy('available_devices.created_at', 'asc');
         } else if (sort.name === 'date_desc') {
@@ -1273,6 +1205,7 @@ const deviceListSearch = async (req, res) => {
 
       return helper.showSuccessOk(res, { list, count: countRow.count });
     } catch (error) {
+      console.log(error);
       return helper.showServerError(res, error);
     }
   }

@@ -12,13 +12,10 @@ export const queryNotTransactionExchange = () => db('transactions_exchange')
 export const serviceListCart = (userId) => new Promise((resolve, reject) => {
   db('carts')
     .innerJoin('devices', 'carts.device_id', 'devices.id')
-    .join('imeis', 'devices.imei_id', 'imeis.id')
     .innerJoin('rams', 'rams.id', 'devices.ram_id')
     .innerJoin('colors', 'devices.color_id', 'colors.id')
     .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-    .innerJoin('models', 'imeis.model_id', 'models.id')
-    .innerJoin('categories', 'models.category_id', 'categories.id')
-    .innerJoin('brands', 'models.brand_id', 'brands.id')
+    .innerJoin('brands', 'devices.brand_id', 'brands.id')
     .innerJoin('available_devices', 'devices.id', 'available_devices.device_id')
     .innerJoin('device_images', 'devices.id', 'device_images.device_id')
     .leftOuterJoin('proposals', 'proposals.cart_id', 'carts.id')
@@ -30,8 +27,7 @@ export const serviceListCart = (userId) => new Promise((resolve, reject) => {
       'rams.value as ram_value',
       'colors.name as color',
       'capacities.value as capacity',
-      'models.name as model',
-      'categories.name as category_name',
+      'devices.model as model',
       'brands.name as brand_name',
       'device_images.url',
       'available_devices.sale_price',
@@ -58,13 +54,10 @@ export const serviceListCart = (userId) => new Promise((resolve, reject) => {
 export const serviceListCartAnonymous = (userId) => new Promise((resolve, reject) => {
   db('tracing_carts')
     .innerJoin('devices', 'tracing_carts.device_id', 'devices.id')
-    .join('imeis', 'devices.imei_id', 'imeis.id')
     .innerJoin('rams', 'rams.id', 'devices.ram_id')
     .innerJoin('colors', 'devices.color_id', 'colors.id')
     .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-    .innerJoin('models', 'imeis.model_id', 'models.id')
-    .innerJoin('categories', 'models.category_id', 'categories.id')
-    .innerJoin('brands', 'models.brand_id', 'brands.id')
+    .innerJoin('brands', 'devices.brand_id', 'brands.id')
     .innerJoin('available_devices', 'devices.id', 'available_devices.device_id')
     .innerJoin('device_images', 'devices.id', 'device_images.device_id')
     .select(
@@ -74,8 +67,7 @@ export const serviceListCartAnonymous = (userId) => new Promise((resolve, reject
       'rams.value as ram_value',
       'colors.name as color',
       'capacities.value as capacity',
-      'models.name as model',
-      'categories.name as category_name',
+      'devices.model as model',
       'brands.name as brand_name',
       'device_images.url',
       'available_devices.sale_price',

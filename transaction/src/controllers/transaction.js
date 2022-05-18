@@ -103,13 +103,10 @@ const getListSell = async (userId) => new Promise((resolve, reject) => {
     .orWhere('proposals.status', BUYER_ACCEPT);
   db('carts')
     .innerJoin('devices', 'carts.device_id', 'devices.id')
-    .join('imeis', 'devices.imei_id', 'imeis.id')
     .innerJoin('rams', 'rams.id', 'devices.ram_id')
     .innerJoin('colors', 'devices.color_id', 'colors.id')
     .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-    .innerJoin('models', 'imeis.model_id', 'models.id')
-    .innerJoin('categories', 'models.category_id', 'categories.id')
-    .innerJoin('brands', 'models.brand_id', 'brands.id')
+    .innerJoin('brands', 'devices.brand_id', 'brands.id')
     .innerJoin('available_devices', 'devices.id', 'available_devices.device_id')
     .innerJoin('device_images', 'devices.id', 'device_images.device_id')
     .innerJoin('auth_users', 'auth_users.id', 'devices.user_id')
@@ -124,9 +121,7 @@ const getListSell = async (userId) => new Promise((resolve, reject) => {
       'rams.value as ram_value',
       'colors.name as color',
       'capacities.value as capacity',
-      'models.name as model',
-      'models.physical_shipping',
-      'categories.name as category_name',
+      'devices.model as model',
       'brands.name as brand_name',
       'device_images.url',
       'shippings.address as full_address',
@@ -650,14 +645,11 @@ const listTransactionSeller = async (req, res) => {
       .innerJoin('orders', 'orders.id', 'transactions.order_id')
       .innerJoin('orders_seller', 'orders_seller.id', 'transactions.order_seller_id')
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
       .leftJoin('device_images', 'devices.id', 'device_images.device_id')
       .innerJoin('rams', 'devices.ram_id', 'rams.id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
-      .innerJoin('categories', 'models.category_id', 'categories.id')
-      .innerJoin('brands', 'models.brand_id', 'brands.id')
+      .innerJoin('brands', 'devices.brand_id', 'brands.id')
       .innerJoin('auth_users', 'auth_users.id', 'orders.user_id')
       .distinct('transactions.id', 'transactions.id as transaction_id',
         'orders_seller.code as sale_number',
@@ -671,13 +663,10 @@ const listTransactionSeller = async (req, res) => {
         'transactions.type', 'transactions.created_at',
         'devices.id as device_id',
         'devices.physical_grading',
-        'imeis.id as imei_id',
         'rams.value as ram',
         'colors.name as color',
         'capacities.value as capacity',
-        'models.name as model',
-        'categories.name as category_name',
-        'categories.image_url as category_image_url',
+        'devices.model as model',
         'brands.id as brand_id',
         'brands.name as brand_name',
         'brands.image_url as brand_image_url',
@@ -742,14 +731,11 @@ const listTransactionSeller = async (req, res) => {
       .innerJoin('orders', 'orders.id', 'transactions.order_id')
       .innerJoin('orders_seller', 'orders_seller.id', 'transactions.order_seller_id')
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
       .leftJoin('device_images', 'devices.id', 'device_images.device_id')
       .innerJoin('rams', 'devices.ram_id', 'rams.id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
-      .innerJoin('categories', 'models.category_id', 'categories.id')
-      .innerJoin('brands', 'models.brand_id', 'brands.id')
+      .innerJoin('brands', 'devices.brand_id', 'brands.id')
       .innerJoin('auth_users', 'auth_users.id', 'orders.user_id')
       .distinct('transactions.id',
         'orders_seller.code as sale_number',
@@ -762,13 +748,10 @@ const listTransactionSeller = async (req, res) => {
         'transactions.type', 'transactions.created_at',
         'devices.id as device_id',
         'devices.physical_grading',
-        'imeis.id as imei_id',
         'rams.value as ram',
         'colors.name as color',
         'capacities.value as capacity',
-        'models.name as model',
-        'categories.name as category_name',
-        'categories.image_url as category_image_url',
+        'devices.model as model',
         'brands.id as brand_id',
         'brands.name as brand_name',
         'brands.image_url as brand_image_url',
@@ -1169,14 +1152,10 @@ const detailOrder = async (req, res) => {
           'transactions.money_not_fee',
           'transactions.dingtoi_fee_buyer',
           'devices.physical_grading',
-          'imeis.id as imei_id',
           'rams.value as ram',
           'colors.name as color',
           'capacities.value as capacity',
-          'models.name as model',
-          'models.image_url as model_url',
-          'categories.name as category_name',
-          'categories.image_url as category_image_url',
+          'devices.model as model',
           'brands.id as brand_id',
           'brands.name as brand_name',
           'brands.image_url as brand_image_url',
@@ -1184,14 +1163,11 @@ const detailOrder = async (req, res) => {
           'device_images.url')
         .innerJoin('orders', 'orders.id', 'transactions.order_id')
         .innerJoin('devices', 'devices.id', 'transactions.device_id')
-        .join('imeis', 'devices.imei_id', 'imeis.id')
         .leftJoin('device_images', 'devices.id', 'device_images.device_id')
         .innerJoin('rams', 'devices.ram_id', 'rams.id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .innerJoin('auth_users', 'auth_users.id', 'devices.user_id')
         .where(function () {
           this.where('device_images.main', 'true').orWhere('device_images.main', null);
@@ -1322,14 +1298,10 @@ export const detailOrderSeller = async (req, res) => {
           'transactions.shipping_rate_seller',
           'transactions.shipping_rate_buyer',
           'devices.physical_grading',
-          'imeis.id as imei_id',
           'rams.value as ram',
           'colors.name as color',
           'capacities.value as capacity',
-          'models.name as model',
-          'models.image_url as model_url',
-          'categories.name as category_name',
-          'categories.image_url as category_image_url',
+          'devices.model as model',
           'brands.id as brand_id',
           'brands.name as brand_name',
           'brands.image_url as brand_image_url',
@@ -1337,14 +1309,11 @@ export const detailOrderSeller = async (req, res) => {
           'device_images.url')
         .innerJoin('orders_seller', 'orders_seller.id', 'transactions.order_seller_id')
         .innerJoin('devices', 'devices.id', 'transactions.device_id')
-        .join('imeis', 'devices.imei_id', 'imeis.id')
         .leftJoin('device_images', 'devices.id', 'device_images.device_id')
         .innerJoin('rams', 'devices.ram_id', 'rams.id')
         .innerJoin('colors', 'devices.color_id', 'colors.id')
         .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-        .innerJoin('models', 'imeis.model_id', 'models.id')
-        .innerJoin('categories', 'models.category_id', 'categories.id')
-        .innerJoin('brands', 'models.brand_id', 'brands.id')
+        .innerJoin('brands', 'devices.brand_id', 'brands.id')
         .where(function () {
           this.where('device_images.main', 'true').orWhere('device_images.main', null);
         })
@@ -1730,23 +1699,17 @@ export const orderCreation = async (req, res) => {
           });
           const sellerEmail = await db('auth_users').first('email').where('id', it.seller_id);
           const device = await db('devices')
-            .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
             .innerJoin('rams', 'devices.ram_id', 'rams.id')
             .innerJoin('colors', 'devices.color_id', 'colors.id')
             .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-            .innerJoin('models', 'imeis.model_id', 'models.id')
-            .innerJoin('categories', 'models.category_id', 'categories.id')
-            .innerJoin('brands', 'models.brand_id', 'brands.id')
+            .innerJoin('brands', 'devices.brand_id', 'brands.id')
             .first(
               'devices.id as device_id',
               'devices.physical_grading',
-              'imeis.id as imei_id',
               'rams.value as ram',
               'colors.name as color',
               'capacities.value as capacity',
-              'models.name as model',
-              'categories.name as category_name',
-              'categories.image_url as category_image_url',
+              'devices.model as model',
               'brands.id as brand_id',
               'brands.name as brand_name',
               'brands.image_url as brand_image_url',
@@ -1956,9 +1919,7 @@ export const transactionDetail = async (req, res) => {
       .innerJoin('rams', 'devices.ram_id', 'rams.id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('imeis', 'devices.imei_id', 'imeis.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
-      .innerJoin('brands', 'models.brand_id', 'brands.id')
+      .innerJoin('brands', 'devices.brand_id', 'brands.id')
       .innerJoin('auth_users', 'auth_users.id', 'orders.user_id')
       .leftJoin('device_images', 'devices.id', 'device_images.device_id')
       .first(
@@ -1983,11 +1944,10 @@ export const transactionDetail = async (req, res) => {
         'capacities.value as capacity',
         'device_images.url',
         'devices.id as device_id',
-        'models.name as model',
+        'devices.model as model',
         'brands.name as brand_name',
         'auth_users.email',
         'transactions.type',
-        'imeis.id as imei_id',
       )
       .where('transactions.id', id)
       .where(function () {
@@ -2108,6 +2068,7 @@ export const transactionDetail = async (req, res) => {
     }
     return helper.showSuccessOk(res, transaction);
   } catch (error) {
+    console.log(error);
     return helper.showServerError(res, error);
   }
 };
@@ -2137,7 +2098,7 @@ export const transactionSubmitPasscode = async (req, res) => {
         'transactions.id as transaction_id',
         'auth_users.email as buyer_email',
         'auth_users.id as buyer_id',
-        'models.name as device_name',
+        'devices.model as device_name',
         'capacities.value as capacity_name',
         'colors.name as color_name',
         'devices.id as device_id',
@@ -2146,11 +2107,9 @@ export const transactionSubmitPasscode = async (req, res) => {
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
       .innerJoin('available_devices', 'available_devices.device_id', 'devices.id')
       .innerJoin('auth_users', 'auth_users.id', 'orders.user_id')
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
       .innerJoin('rams', 'devices.ram_id', 'rams.id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
       .where('available_devices.device_app_id', id)
       .orderBy('transactions.created_at', 'desc');
 
@@ -2223,12 +2182,13 @@ export const transactionSubmitPasscode = async (req, res) => {
       }).where('id', id);
 
       await trx('transactions').update({
-        status: TRANSACTION_STATUS.READY,
+        status: TRANSACTION_STATUS.BUYER_RECEIVED,
+        // status: TRANSACTION_STATUS.READY,
         updated_at: date,
       }).where('id', id);
 
       await trx('transactions_exchange').update({
-        status: TRANSACTION_STATUS.READY,
+        status: TRANSACTION_STATUS.BUYER_RECEIVED,
         updated_at: date,
       }).where('id', id);
 
@@ -2419,14 +2379,12 @@ export const createTransactionPickup = async (req, res) => {
         'colors.name as color',
         'capacities.value as capacity',
         'devices.id as device_id',
-        'models.name as model',
+        'devices.model as model',
       )
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
       .innerJoin('rams', 'devices.ram_id', 'rams.id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('imeis', 'devices.imei_id', 'imeis.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
       .whereIn('transactions.status', [TRANSACTION_STATUS.READY])
       .where('transactions.order_seller_id', id);
 
@@ -2449,7 +2407,7 @@ export const createTransactionPickup = async (req, res) => {
       const date = new Date();
       await db.transaction(async (trx) => {
         await trx('transactions').update({
-          status: TRANSACTION_STATUS.TO_BE_SHIPPED,
+          status: TRANSACTION_STATUS.BUYER_RECEIVED,
           shipping_rate_seller: transaction.shipping_rate_seller,
           updated_at: date,
         }).whereIn('id', transactionIds);

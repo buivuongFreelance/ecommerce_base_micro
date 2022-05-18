@@ -254,14 +254,13 @@ export const serviceListNewDevices = (userId, limit, offset, filter,
 
   const query = db('devices')
     .innerJoin('available_devices', 'devices.id', 'available_devices.device_id')
-    .join('imeis', 'devices.imei_id', 'imeis.id')
+    // .join('imeis', 'devices.imei_id', 'imeis.id')
     .leftJoin('device_images', 'devices.id', 'device_images.device_id')
     .innerJoin('rams', 'devices.ram_id', 'rams.id')
     .innerJoin('colors', 'devices.color_id', 'colors.id')
     .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-    .innerJoin('models', 'imeis.model_id', 'models.id')
-    .innerJoin('categories', 'models.category_id', 'categories.id')
-    .innerJoin('brands', 'models.brand_id', 'brands.id')
+    // .innerJoin('models', 'imeis.model_id', 'models.id')
+    .innerJoin('brands', 'devices.brand_id', 'brands.id')
     .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
     .leftJoin(
       db('wishlists')
@@ -269,12 +268,12 @@ export const serviceListNewDevices = (userId, limit, offset, filter,
         .where('user_id', userId).as('wishlists'),
       'devices.id', 'wishlists.device_id',
     )
-    .leftJoin(
-      db('device_tags')
-        .select('id', 'model_id', 'created_at')
-        .where('user_id', userId).as('device_tags'),
-      'models.id', 'device_tags.model_id',
-    )
+    // .leftJoin(
+    //   db('device_tags')
+    //     .select('id', 'model_id', 'created_at')
+    //     .where('user_id', userId).as('device_tags'),
+    //   'models.id', 'device_tags.model_id',
+    // )
     .select(
       'available_devices.sale_price',
       'available_devices.real_sale_price',
@@ -284,18 +283,16 @@ export const serviceListNewDevices = (userId, limit, offset, filter,
       'devices.id as device_id',
       'devices.status',
       'devices.physical_grading',
-      'imeis.id as imei_id',
+      // 'imeis.id as imei_id',
       'rams.value as ram',
       'colors.name as color',
       'capacities.value as capacity',
-      'models.name as model',
-      'categories.name as category_name',
-      'categories.image_url as category_image_url',
+      'devices.model as model',
       'brands.id as brand_id',
       'brands.name as brand_name',
       'brands.image_url as brand_image_url',
       'device_images.url',
-      'device_tags.id as device_tag',
+      // 'device_tags.id as device_tag',
       'wishlists.id as wishlist_id',
       db.raw('device_scans.main_info -> \'diamondRating\' AS dingtoi_rating'),
       db.raw('device_scans.main_info -> \'url_summary_report\' AS dingtoi_scan_image'),
@@ -313,14 +310,13 @@ export const serviceListNewDevices = (userId, limit, offset, filter,
 
   const queryCount = db('devices')
     .innerJoin('available_devices', 'devices.id', 'available_devices.device_id')
-    .join('imeis', 'devices.imei_id', 'imeis.id')
+    // .join('imeis', 'devices.imei_id', 'imeis.id')
     .leftJoin('device_images', 'devices.id', 'device_images.device_id')
     .innerJoin('rams', 'devices.ram_id', 'rams.id')
     .innerJoin('colors', 'devices.color_id', 'colors.id')
     .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-    .innerJoin('models', 'imeis.model_id', 'models.id')
-    .innerJoin('categories', 'models.category_id', 'categories.id')
-    .innerJoin('brands', 'models.brand_id', 'brands.id')
+    // .innerJoin('models', 'imeis.model_id', 'models.id')
+    .innerJoin('brands', 'devices.brand_id', 'brands.id')
     .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
     .count('devices.id', { as: 'count' })
     .where('devices.status', POSTED)
@@ -371,14 +367,14 @@ export const serviceListNewDevicesAnonymous = (userId, limit, offset, filter) =>
 
   const query = db('devices')
     .leftJoin('available_devices', 'devices.id', 'available_devices.device_id')
-    .join('imeis', 'devices.imei_id', 'imeis.id')
+    // .join('imeis', 'devices.imei_id', 'imeis.id')
     .leftJoin('device_images', 'devices.id', 'device_images.device_id')
     .innerJoin('rams', 'devices.ram_id', 'rams.id')
     .innerJoin('colors', 'devices.color_id', 'colors.id')
     .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-    .innerJoin('models', 'imeis.model_id', 'models.id')
-    .innerJoin('categories', 'models.category_id', 'categories.id')
-    .innerJoin('brands', 'models.brand_id', 'brands.id')
+    // .innerJoin('models', 'imeis.model_id', 'models.id')
+    // .innerJoin('categories', 'models.category_id', 'categories.id')
+    .innerJoin('brands', 'devices.brand_id', 'brands.id')
     .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
     .leftOuterJoin('tracing_carts', 'devices.id', 'tracing_carts.device_id')
     .leftJoin(
@@ -396,13 +392,10 @@ export const serviceListNewDevicesAnonymous = (userId, limit, offset, filter) =>
       'devices.id as device_id',
       'devices.status',
       'devices.physical_grading',
-      'imeis.id as imei_id',
       'rams.value as ram',
       'colors.name as color',
       'capacities.value as capacity',
-      'models.name as model',
-      'categories.name as category_name',
-      'categories.image_url as category_image_url',
+      'devices.model as model',
       'brands.id as brand_id',
       'brands.name as brand_name',
       'brands.image_url as brand_image_url',
@@ -423,14 +416,11 @@ export const serviceListNewDevicesAnonymous = (userId, limit, offset, filter) =>
 
   const queryCount = db('devices')
     .leftJoin('available_devices', 'devices.id', 'available_devices.device_id')
-    .join('imeis', 'devices.imei_id', 'imeis.id')
     .leftJoin('device_images', 'devices.id', 'device_images.device_id')
     .innerJoin('rams', 'devices.ram_id', 'rams.id')
     .innerJoin('colors', 'devices.color_id', 'colors.id')
     .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-    .innerJoin('models', 'imeis.model_id', 'models.id')
-    .innerJoin('categories', 'models.category_id', 'categories.id')
-    .innerJoin('brands', 'models.brand_id', 'brands.id')
+    .innerJoin('brands', 'devices.brand_id', 'brands.id')
     .leftJoin('device_scans', 'available_devices.device_scan_id', 'device_scans.id')
     .leftOuterJoin('tracing_carts', 'devices.id', 'tracing_carts.device_id')
     .count('devices.id', { as: 'count' })
@@ -584,17 +574,17 @@ export const serviceListFeaturedAnonymous = (userId,
 export const serviceListDevice = (deviceName, status, grade,
   userId, limit, offset, sort) => new Promise((resolve, reject) => {
     const query = db('devices')
-      .join('imeis', 'devices.imei_id', 'imeis.id')
+      // .join('imeis', 'devices.imei_id', 'imeis.id')
       .innerJoin('rams', 'devices.ram_id', 'rams.id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
-      .innerJoin('categories', 'models.category_id', 'categories.id')
+      // .innerJoin('models', 'imeis.model_id', 'models.id')
+      // .innerJoin('categories', 'models.category_id', 'categories.id')
       .leftJoin('transactions', 'transactions.device_id', 'devices.id')
       .leftJoin('transactions_exchange', 'transactions_exchange.device_id', 'devices.id')
       .leftJoin('orders_seller', 'orders_seller.id', 'transactions_exchange.order_seller_id')
       .leftJoin('orders', 'orders.id', 'orders_seller.order_id')
-      .innerJoin('brands', 'models.brand_id', 'brands.id')
+      .innerJoin('brands', 'devices.brand_id', 'brands.id')
       .leftJoin('auth_users', 'auth_users.id', 'orders.user_id')
       .leftJoin(
         db('carts').select(db.raw('count(proposals.id) as count'), 'carts.device_id')
@@ -607,26 +597,25 @@ export const serviceListDevice = (deviceName, status, grade,
           this.on('devices.id', '=', 'carts.device_id');
         },
       )
-      .distinctOn('models.name', 'devices.physical_grading', 'devices.status', 'devices.created_at')
+      .distinctOn('devices.model', 'devices.physical_grading', 'devices.status', 'devices.created_at')
       .select(
         'devices.physical_grading',
         'devices.status',
         'devices.created_at',
         'devices.id',
-        'imeis.id as imei_id',
-        'imeis.imei as imei',
-        'imeis.other_detail',
-        'imeis.original_price',
+        // 'imeis.id as imei_id',
+        // 'imeis.imei as imei',
+        // 'imeis.other_detail',
+        // 'imeis.original_price',
         'rams.id as ram_id',
         'rams.value as ram',
         'colors.id as color_id',
         'colors.name as color',
         'capacities.id as capacity_id',
         'capacities.value as capacity',
-        'models.id as model_id',
-        'models.name as model',
-        'categories.id as category_id',
-        'categories.name as category_name',
+        'devices.model as model',
+        // 'categories.id as category_id',
+        // 'categories.name as category_name',
         'brands.id as brand_id',
         'brands.name as brand_name',
         'carts.count as proposals',
@@ -640,14 +629,14 @@ export const serviceListDevice = (deviceName, status, grade,
         'orders.id as order_id',
         'auth_users.email as transaction_email_buyer',
       )
-      .where('models.name', 'ILIKE', `%${deviceName}%`)
+      .where('devices.model', 'ILIKE', `%${deviceName}%`)
       .where('devices.status', 'like', `%${status}%`)
       .where('devices.physical_grading', 'like', `%${grade}%`)
       .where('devices.user_id', userId)
       .offset(offset)
       .limit(limit);
     if (sort.deviceName) {
-      query.orderBy('models.name', sort.deviceName);
+      query.orderBy('devices.model', sort.deviceName);
     } else if (sort.physicalGrading) {
       query.orderBy('devices.physical_grading', sort.physicalGrading);
     } else if (sort.status) {
@@ -664,11 +653,11 @@ export const serviceListDevice = (deviceName, status, grade,
 export const serviceListDeviceCount = (userId, deviceName,
   status, grade) => new Promise((resolve, reject) => {
     db('devices')
-      .join('imeis', 'devices.imei_id', 'imeis.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
+      // .join('imeis', 'devices.imei_id', 'imeis.id')
+      // .innerJoin('models', 'imeis.model_id', 'models.id')
       .count('devices.id', { as: 'count' })
       .where('devices.user_id', userId)
-      .where('models.name', 'ILIKE', `%${deviceName}%`)
+      .where('devices.model', 'ILIKE', `%${deviceName}%`)
       .where('devices.status', 'like', `%${status}%`)
       .where('devices.physical_grading', 'like', `%${grade}%`)
       .first()

@@ -141,8 +141,7 @@ const checkTransactionQrCode = async (req, res) => {
     const transaction = await db('transactions')
       .innerJoin('orders', 'orders.id', 'transactions.order_id')
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
-      .first('transactions.status', 'transactions.transaction_code', 'imeis.imei', 'devices.physical_grading')
+      .first('transactions.status', 'transactions.transaction_code', 'devices.model as imei', 'devices.physical_grading')
       .where('devices.user_id', user.seller_id)
       .where('transactions.id', transactionCode);
 
@@ -223,12 +222,12 @@ const summaryRealDeviceReport = async (req, res) => {
         'devices.user_id',
         'colors.name as color',
         'capacities.value as capacity',
-        'models.name as model',
+        'devices.model as model',
       )
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
+      // .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
+      // .innerJoin('models', 'imeis.model_id', 'models.id')
       .where('devices.id', device.real_device_id);
     const user = await db('auth_users').first('email').where('id', userId);
 
@@ -293,10 +292,8 @@ const ownerScanAccept = async (req, res) => {
 
     let device = await db('transactions')
       .innerJoin('devices', 'devices.id', 'transactions.device_id')
-      .innerJoin('imeis', 'imeis.id', 'devices.imei_id')
       .innerJoin('colors', 'devices.color_id', 'colors.id')
       .innerJoin('capacities', 'devices.capacity_id', 'capacities.id')
-      .innerJoin('models', 'imeis.model_id', 'models.id')
       .innerJoin('orders', 'orders.id', 'transactions.order_id')
       .innerJoin('orders_seller', 'orders_seller.id', 'transactions.order_seller_id')
       .innerJoin('auth_users', 'auth_users.id', 'orders.user_id')
@@ -306,7 +303,7 @@ const ownerScanAccept = async (req, res) => {
         'devices.user_id',
         'colors.name as color',
         'capacities.value as capacity',
-        'models.name as model',
+        'devices.model as model',
         'transactions.id as transaction_id',
         'orders.id as order_id',
         'orders_seller.id as order_seller_id',
@@ -510,6 +507,7 @@ const ownerScanAccept = async (req, res) => {
     }
     return helper.showSuccessOk(res, helper.SUCCESS);
   } catch (error) {
+    console.log('error', error);
     return helper.showServerError(res, error);
   }
 };
